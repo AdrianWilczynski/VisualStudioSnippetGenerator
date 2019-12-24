@@ -1,0 +1,88 @@
+﻿@page "/"
+
+<form class="row">
+        <div class="col-12 col-md-6">
+            <div class="row">
+                <div class="form-group col-12 col-lg-6">
+                    <label for="@nameof(Title)" class="h5">@nameof(Title)</label>
+                    <input id="@nameof(Title)" @bind-value="Title" @bind-value:event="oninput"
+                        class="form-control border border-primary" />
+                </div>
+                <div class="form-group col-12 col-lg-6">
+                    <label for="@nameof(Shortcut)" class="h5">@nameof(Shortcut)</label>
+                    <input id="@nameof(Shortcut)" @bind-value="Shortcut" @bind-value:event="oninput"
+                        class="form-control border border-primary" />
+                </div>
+                <div class="form-group col-12 col-lg-6">
+                    <label for="@nameof(Language)" class="h5">@nameof(Language)</label>
+                    <input id="@nameof(Language)" @bind-value="Language" @bind-value:event="oninput"
+                        list="@nameof(Constants.Languages)" class="form-control border border-primary" />
+
+                    <datalist id="@nameof(Constants.Languages)">
+                        @foreach (var language in Constants.Languages)
+                        {
+                            <option value="@language" />
+                        }
+                    </datalist>
+                </div>
+                <div class="form-group col-12 col-lg-6">
+                    <label for="@nameof(Description)" class="h5">@nameof(Description)</label>
+                    <input id="@nameof(Description)" @bind-value="Description" @bind-value:event="oninput"
+                        class="form-control" />
+                </div>
+                <div class="form-group col-12 col-lg-6">
+                    <label for="@nameof(Author)" class="h5">@nameof(Author)</label>
+                    <input id="@nameof(Author)" @bind-value="Author" @bind-value:event="oninput"
+                        class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="@nameof(Body)" class="h5">@nameof(Body)</label>
+                <textarea id="@nameof(Body)" rows="20" @bind-value="Body" @bind-value:event="oninput"
+                    class="form-control border border-primary"></textarea>
+            </div> 
+    </div>
+    <div class="col-12 col-md-6">
+        <div>
+            <h2 class="h5">Literals</h2>
+            <div class="row">
+                @foreach (var literal in Literals)
+                {
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="d-flex justify-content-end">
+                            <button @onclick="@(() => OnRemoveLiteralClick(literal))" type="button" title="Remove"
+                                class="btn btn-link btn-sm text-decoration-none text-danger">
+                                🗙
+                            </button>
+                        </div>
+                        <div class="form-group">
+                            <label for="@nameof(literal.Id)-@literal.Key" class="small">
+                                @nameof(literal.Id)
+                            </label>
+                            <input id="@nameof(literal.Id)-@literal.Key" value="@literal.Id"
+                                @oninput="@(e => OnLiteralIdInput(literal, (string)e.Value))"
+                                class="form-control form-control-sm border border-primary" />
+                        </div>
+                        <div class="form-group">
+                            <label for="@nameof(literal.DefaultValue)-@literal.Key" class="small">
+                                Default Value
+                            </label>
+                            <input id="@nameof(literal.DefaultValue)-@literal.Key" value="@literal.DefaultValue"
+                                @oninput="@(e => OnLiteralDefaultValueInput(literal, (string)e.Value))"
+                                class="form-control form-control-sm border border-primary" />
+                        </div>
+                    </div>
+                }
+                
+                @if(Literals.Count == 0)
+                {
+                    <p class="pl-2">None yet. Input <i>$id$</i> into snippet body to add literals.</p>
+                }
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="@nameof(SnippetText)" class="h5">Snippet Text</label>
+            <textarea id="@nameof(SnippetText)" @bind="SnippetText" class="form-control border border-success" rows=30></textarea>
+        </div>
+    </div>
+</form>
