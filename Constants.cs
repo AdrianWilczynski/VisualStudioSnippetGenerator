@@ -9,10 +9,30 @@ namespace VisualStudioSnippetGenerator
             "CSharp",
             "TypeScript",
             "JavaScript",
+            "CPP",
             "VB",
             "XML",
             "HTML",
-            "CSS"
+            "CSS",
+            "SQL"
         };
+
+        public static class ReservedKeywords
+        {
+            public const string End = "end";
+            public const string Selected = "selected";
+
+            public static IEnumerable<string> All => new[]
+            {
+                End,
+                Selected
+            };
+        }
+
+        public static class SnippetTypes
+        {
+            public const string Expansion = "Expansion";
+            public const string SurroundsWith = "SurroundsWith";
+        }
     }
 }

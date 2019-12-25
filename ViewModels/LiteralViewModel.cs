@@ -10,7 +10,7 @@ namespace VisualStudioSnippetGenerator.ViewModels
         private string _defaultValue = string.Empty;
         private string _tooltip = string.Empty;
 
-        public LiteralViewModel(string id)
+        public LiteralViewModel(string id = "")
         {
             _id = id;
         }

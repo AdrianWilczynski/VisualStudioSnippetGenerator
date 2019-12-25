@@ -10,11 +10,11 @@ namespace VisualStudioSnippetGenerator.Models
     {
         public VisualStudioSnippet() { }
 
-        public VisualStudioSnippet(string title, string shortcut, string language, string body, string? description = null,
-            string? author = null, IEnumerable<Literal>? literals = null)
+        public VisualStudioSnippet(string title, string shortcut, string language, bool isExpansion, bool isSurroundsWith,
+            string body, string? description = null, string? author = null, IEnumerable<Literal>? literals = null)
         {
             CodeSnippet = new CodeSnippet(
-                new Header(title, shortcut, description, author),
+                new Header(title, shortcut, isExpansion, isSurroundsWith, description, author),
                 new Snippet(
                     new Code(language, body), literals));
         }
@@ -47,12 +47,21 @@ namespace VisualStudioSnippetGenerator.Models
     {
         public Header() { }
 
-        public Header(string title, string shortcut, string? description, string? author)
+        public Header(string title, string shortcut, bool isExpansion, bool isSurroundsWith, string? description, string? author)
         {
             Title = title;
             Shortcut = shortcut;
             Description = description;
             Author = author;
+
+            if (isExpansion)
+            {
+                SnippetTypes.Add(new SnippetType(Constants.SnippetTypes.Expansion));
+            }
+            if (isSurroundsWith)
+            {
+                SnippetTypes.Add(new SnippetType(Constants.SnippetTypes.SurroundsWith));
+            }
         }
 
         public string? Title { get; set; }
@@ -60,10 +69,7 @@ namespace VisualStudioSnippetGenerator.Models
         public string? Description { get; set; }
         public string? Author { get; set; }
 
-        public SnippetType[] SnippetTypes { get; set; } = new[]
-        {
-            new SnippetType("Expansion")
-        };
+        public List<SnippetType> SnippetTypes { get; set; } = new List<SnippetType>();
     }
 
     public class SnippetType

@@ -17,6 +17,8 @@ namespace VisualStudioSnippetGenerator.Pages
         private string _language = string.Empty;
         private string _shortcut = string.Empty;
         private string _title = string.Empty;
+        private bool _isExpansion = true;
+        private bool _isSurroundsWith;
 
         private readonly SnippetSerializer _snippetSerializer;
 
@@ -27,13 +29,19 @@ namespace VisualStudioSnippetGenerator.Pages
             SyncWithSnippetText();
         }
 
+        public bool SyncEnabled { get; set; } = true;
+
         public string Body
         {
             get => _body;
             set
             {
                 _body = value;
-                SyncBodyWithLiterals();
+
+                var replacements = MatchReplacements(value);
+
+                SyncBodyWithLiterals(replacements);
+                SyncBodyWithSnippetType(replacements);
                 SyncWithSnippetText();
             }
         }
@@ -90,11 +98,31 @@ namespace VisualStudioSnippetGenerator.Pages
             }
         }
 
+        public bool IsExpansion
+        {
+            get => _isExpansion;
+            set
+            {
+                _isExpansion = value;
+                SyncWithSnippetText();
+            }
+        }
+
+        public bool IsSurroundsWith
+        {
+            get => _isSurroundsWith;
+            set
+            {
+                _isSurroundsWith = value;
+                SyncWithSnippetText();
+            }
+        }
+
         public string SnippetText { get; set; } = string.Empty;
 
-        public void OnLiteralIdInput(LiteralViewModel literal, string newValue)
+        public void OnLiteralIdChange(LiteralViewModel literal, string newValue)
         {
-            if (IsReplacement(AsReplacement(newValue)) || newValue.Length == 0)
+            if (IsReplacement(AsReplacement(newValue)))
             {
                 SyncLiteralIdWithBody(literal.Id, newValue);
             }
@@ -112,19 +140,42 @@ namespace VisualStudioSnippetGenerator.Pages
         public void OnRemoveLiteralClick(LiteralViewModel literal)
         {
             Literals.Remove(literal);
-
             SyncWithSnippetText();
         }
 
-        public void SyncBodyWithLiterals()
-            => Literals = MapReplacementsToLiterals(MatchReplacements(_body), Literals);
+        public void OnAddLiteralClick()
+        {
+            Literals.Add(new LiteralViewModel());
+            SyncWithSnippetText();
+        }
+
+        public void SyncBodyWithLiterals(IEnumerable<string> replacements)
+        {
+            if (SyncEnabled)
+            {
+                Literals = MapReplacementsToLiterals(replacements, Literals);
+            }
+        }
+
+        public void SyncBodyWithSnippetType(IEnumerable<string> replacements)
+        {
+            if (SyncEnabled)
+            {
+                IsSurroundsWith = replacements.Contains(Constants.ReservedKeywords.Selected);
+            }
+        }
 
         public void SyncLiteralIdWithBody(string oldValue, string newValue)
-            => _body = Regex.Replace(_body, $@"(?<!\$)\${Regex.Escape(oldValue)}\$(?!\$)", AsReplacement(newValue));
+        {
+            if (SyncEnabled)
+            {
+                _body = Regex.Replace(_body, $@"(?<!\$)\${Regex.Escape(oldValue)}\$(?!\$)", AsReplacement(newValue));
+            }
+        }
 
         public void SyncWithSnippetText()
             => SnippetText = _snippetSerializer.Serialize(
-                    new VisualStudioSnippet(Title, Shortcut, Language, Body, Description, Author,
+                    new VisualStudioSnippet(Title, Shortcut, Language, IsExpansion, IsSurroundsWith, Body, Description, Author,
                         Literals.Select(l => new Literal(l.Id, l.DefaultValue))));
 
         public static string AsReplacement(string id)
@@ -143,7 +194,7 @@ namespace VisualStudioSnippetGenerator.Pages
             => literals
                 .Where(l => replacements.Any(r => r == l.Id) || l.Touched)
                 .Concat(replacements
-                    .Where(r => !literals.Any(l => l.Id == r))
+                    .Where(r => !Constants.ReservedKeywords.All.Contains(r) && !literals.Any(l => l.Id == r))
                     .Select(r => new LiteralViewModel(r)))
                 .ToList();
     }
