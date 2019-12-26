@@ -1,10 +1,10 @@
 // @ts-check
 
 /**
- * @param {HTMLTextAreaElement | HTMLInputElement} textarea
+ * @param {HTMLTextAreaElement | HTMLInputElement} input
  */
-function copyToClipboard(textarea) {
-    textarea.select();
+function copyToClipboard(input) {
+    input.select();
     document.execCommand('copy');
 }
 
