@@ -72,10 +72,10 @@
                     @foreach (var import in Imports)
                     {
                         <div class="form-group">
-                            <label for="@nameof(import.Namespace)-@import.UIIdentifier" class="small">
+                            <label for="@import.UIIdentifier" class="small">
                                 @nameof(import.Namespace)
                             </label>
-                            <input id="@nameof(import.Namespace)-@import.UIIdentifier" class="form-control"
+                            <FocusedInput id="@import.UIIdentifier" class="form-control"
                                 @oninput="@(e => SetImport(import, (string)e.Value))"
                                 @onblur="@(_ => RemoveImportIfEmpty(import))" />
                         </div>
@@ -136,53 +136,52 @@
                             </button>
                         </div>
                         <div class="form-check form-check-inline d-flex justify-content-end mr-2">
-                            <label class="form-check-label small mr-2" for="@nameof(declaration.Editable)-@declaration.UIIdentifier">
+                            <label class="form-check-label small mr-2" for="@declaration.UIIdentifier">
                                 @nameof(declaration.Editable)
                             </label>
-                            <input id="@nameof(declaration.Editable)-@declaration.UIIdentifier" type="checkbox" 
+                            <input id="@declaration.UIIdentifier" type="checkbox" 
                                 checked="@declaration.Editable" @onchange="@(e => SetDeclarationEditable(declaration, (bool)e.Value))"
                                 class="form-check-input mr-0" />
                         </div>
                         <div class="form-group">
-                            <label for="@nameof(declaration.Identifier)-@declaration.UIIdentifier" class="small">
+                            <label for="@declaration.UIIdentifier" class="small">
                                 @nameof(declaration.Identifier)
                             </label>
-                            <input id="@nameof(declaration.Identifier)-@declaration.UIIdentifier" value="@declaration.Identifier"
+                            <FocusedInput id="@declaration.UIIdentifier" value="@declaration.Identifier" Focus="declaration.Focus"
                                 @onchange="@(e => SetDeclarationIdentifier(declaration, (string)e.Value))"
                                 class="form-control form-control-sm border border-primary" />
                         </div>
                         <div class="form-group">
-                            <label for="@nameof(declaration.DefaultValue)-@declaration.UIIdentifier" class="small">
+                            <label for="@declaration.UIIdentifier" class="small">
                                 @nameof(declaration.DefaultValue).ToSeparateWords()
                             </label>
-                            <input id="@nameof(declaration.DefaultValue)-@declaration.UIIdentifier" value="@declaration.DefaultValue"
+                            <input id="@declaration.UIIdentifier" value="@declaration.DefaultValue"
                                 @oninput="@(e => SetDefaultDeclarationValue(declaration, (string)e.Value))"
                                 class="form-control form-control-sm border border-primary" />
                         </div>
                         <div class="form-group">
-                            <label for="@nameof(declaration.ToolTip)-@declaration.UIIdentifier" class="small">
+                            <label for="@declaration.UIIdentifier" class="small">
                                 @nameof(declaration.ToolTip)
                             </label>
-                            <input id="@nameof(declaration.ToolTip)-@declaration.UIIdentifier" value="@declaration.ToolTip"
+                            <input id="@declaration.UIIdentifier" value="@declaration.ToolTip"
                                 @oninput="@(e => SetDeclarationToolTip(declaration, (string)e.Value))"
                                 class="form-control form-control-sm" />
                         </div>
                         <div class="form-group">
-                            <label for="@nameof(declaration.Type)-@declaration.UIIdentifier" class="small">
+                            <label for="@declaration.UIIdentifier" class="small">
                                 @nameof(declaration.Type)
                             </label>
-                            <input id="@nameof(declaration.Type)-@declaration.UIIdentifier"
-                                value="@declaration.Type"
+                            <input id="@declaration.UIIdentifier" value="@declaration.Type"
                                 @oninput="@(e => SetDeclarationType(declaration, (string)e.Value))"
                                 class="form-control form-control-sm" />
                         </div>
                         @if(IsCSharp)
                         {
                             <div class="form-group">
-                                <label for="@nameof(declaration.Function)-@declaration.UIIdentifier" class="small">
+                                <label for="@declaration.UIIdentifier" class="small">
                                     @nameof(declaration.Function)
                                 </label>
-                                <input id="@nameof(declaration.Function)-@declaration.UIIdentifier" value="@declaration.Function"
+                                <input id="@declaration.UIIdentifier" value="@declaration.Function"
                                     @oninput="@(e => SetDeclarationFunction(declaration, (string)e.Value))"
                                     list="@nameof(Constants.Functions)" class="form-control form-control-sm" />
                             </div>
@@ -211,7 +210,7 @@
                 class="form-control border border-primary" rows=29></textarea>
         </div>
         <div class="d-flex justify-content-end">
-            <button type="button" @onclick="CopyToClipboard" class="btn btn-primary">Copy to Clipboard!</button>
+            <button type="button" @onclick="CopyToClipboardAsync" class="btn btn-primary">Copy to Clipboard!</button>
         </div>
     </div>
 </form>

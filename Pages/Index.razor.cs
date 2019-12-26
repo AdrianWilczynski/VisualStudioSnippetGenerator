@@ -5,6 +5,7 @@ using VisualStudioSnippetGenerator.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
+using System.Threading.Tasks;
 
 namespace VisualStudioSnippetGenerator.Pages
 {
@@ -133,7 +134,6 @@ namespace VisualStudioSnippetGenerator.Pages
         public void SetDeclarationEditable(Declaration declaration, bool newValue)
             => WithSync(() => declaration.Editable = newValue);
 
-
         public void MoveDeclarationUp(int index)
             => WithSync(() => Declarations.Reverse(index - 1, 2));
 
@@ -141,7 +141,7 @@ namespace VisualStudioSnippetGenerator.Pages
             => WithSync(() => Declarations.Reverse(index, 2));
 
         public void AddDeclaration()
-            => WithSync(() => Declarations.Add(new Declaration()));
+            => WithSync(() => Declarations.Add(new Declaration(touched: true, focus: true)));
 
         public void SetImport(Import import, string newValue)
             => WithSync(() => import.Namespace = newValue);
@@ -163,8 +163,8 @@ namespace VisualStudioSnippetGenerator.Pages
         public void RemoveDeclaration(Declaration declaration)
             => WithSync(() => Declarations.Remove(declaration));
 
-        public void CopyToClipboard()
-            => JSRuntime.InvokeVoidAsync("copyToClipboard", SnippetTextTextarea);
+        public async Task CopyToClipboardAsync()
+            => await JSRuntime.InvokeVoidAsync("copyToClipboard", SnippetTextTextarea);
 
         public void SyncBodyWithDeclarations(IEnumerable<string> replacements)
         {

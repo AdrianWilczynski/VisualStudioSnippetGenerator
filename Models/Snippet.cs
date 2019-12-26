@@ -166,6 +166,12 @@ namespace VisualStudioSnippetGenerator.Models
 
         public Declaration() { }
 
+        public Declaration(bool touched, bool focus)
+        {
+            Touched = touched;
+            Focus = focus;
+        }
+
         public Declaration(string identifier)
         {
             _identifier = identifier;
@@ -250,6 +256,9 @@ namespace VisualStudioSnippetGenerator.Models
 
         [XmlIgnore]
         public bool Touched { get; set; }
+
+        [XmlIgnore]
+        public bool Focus { get; set; }
     }
 
     public class Literal : Declaration

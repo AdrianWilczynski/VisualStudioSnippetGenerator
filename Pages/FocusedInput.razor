@@ -1,0 +1,22 @@
+@inject IJSRuntime JSRuntime
+
+<input @ref="InputElement" @attributes="Attributes" />
+
+@code {
+    private ElementReference InputElement { get; set; }
+
+    [Parameter]
+    public bool Focus { get; set; } = true;
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? Attributes { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender || !Focus) {
+            return;
+        }
+
+        await JSRuntime.InvokeVoidAsync("focus", InputElement);
+    }
+}
