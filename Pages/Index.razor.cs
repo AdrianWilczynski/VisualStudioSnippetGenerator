@@ -129,6 +129,9 @@ namespace VisualStudioSnippetGenerator.Pages
         public void SetDeclarationFunction(Declaration declaration, string newValue)
             => WithSync(() => declaration.Function = newValue);
 
+        public void SetDeclarationEditable(Declaration declaration, bool newValue)
+            => WithSync(() => declaration.Editable = newValue);
+
         public void RemoveDeclaration(Declaration declaration)
             => WithSync(() => Declarations.Remove(declaration));
 

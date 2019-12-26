@@ -138,6 +138,7 @@ namespace VisualStudioSnippetGenerator.Models
     public class Declaration
     {
         private string _identifier = string.Empty;
+        private bool _editable = true;
         private string _defaultValue = string.Empty;
         private string? _toolTip;
         private string? _function;
@@ -153,6 +154,7 @@ namespace VisualStudioSnippetGenerator.Models
         public Declaration(Declaration declaration) : this(declaration.Identifier)
         {
             _defaultValue = declaration.DefaultValue;
+            _editable = declaration.Editable;
             _toolTip = declaration.ToolTip;
             _function = declaration.Function;
             _type = declaration.Type;
@@ -168,6 +170,19 @@ namespace VisualStudioSnippetGenerator.Models
             set
             {
                 _identifier = value;
+                Touched = true;
+            }
+        }
+
+        public bool EditableSpecified => !Editable;
+
+        [XmlAttribute]
+        public bool Editable
+        {
+            get => _editable;
+            set
+            {
+                _editable = value;
                 Touched = true;
             }
         }

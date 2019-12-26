@@ -105,6 +105,14 @@
                                 🗙
                             </button>
                         </div>
+                        <div class="form-check form-check-inline d-flex justify-content-end mr-2">
+                            <label class="form-check-label small mr-2" for="@nameof(declaration.Editable)-@declaration.UIIdentifier">
+                                @nameof(declaration.Editable)
+                            </label>
+                            <input id="@nameof(declaration.Editable)-@declaration.UIIdentifier" type="checkbox" 
+                                checked="@declaration.Editable" @onchange="@(e => SetDeclarationEditable(declaration, (bool)e.Value))"
+                                class="form-check-input mr-0" />
+                        </div>
                         <div class="form-group">
                             <label for="@nameof(declaration.Identifier)-@declaration.UIIdentifier" class="small">
                                 @nameof(declaration.Identifier)
