@@ -1,4 +1,5 @@
-﻿@page "/"
+﻿@inherits SyncableComponentBase
+@page "/"
 
 <form class="row">
         <div class="col-12 col-md-6">
@@ -90,18 +91,18 @@
                             </button>
                         </div>
                         <div class="form-group">
-                            <label for="@nameof(literal.Id)-@literal.Key" class="small">
-                                @nameof(literal.Id)
+                            <label for="@nameof(literal.Identifier)-@literal.UIIdentifier" class="small">
+                                @nameof(literal.Identifier)
                             </label>
-                            <input id="@nameof(literal.Id)-@literal.Key" value="@literal.Id"
-                                @onchange="@(e => SetLiteralId(literal, (string)e.Value))"
+                            <input id="@nameof(literal.Identifier)-@literal.UIIdentifier" value="@literal.Identifier"
+                                @onchange="@(e => SetLiteralIdentifier(literal, (string)e.Value))"
                                 class="form-control form-control-sm border border-primary" />
                         </div>
                         <div class="form-group">
-                            <label for="@nameof(literal.DefaultValue)-@literal.Key" class="small">
+                            <label for="@nameof(literal.DefaultValue)-@literal.UIIdentifier" class="small">
                                 Default Value
                             </label>
-                            <input id="@nameof(literal.DefaultValue)-@literal.Key" value="@literal.DefaultValue"
+                            <input id="@nameof(literal.DefaultValue)-@literal.UIIdentifier" value="@literal.DefaultValue"
                                 @oninput="@(e => SetDefaultLiteralValue(literal, (string)e.Value))"
                                 class="form-control form-control-sm border border-primary" />
                         </div>

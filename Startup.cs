@@ -9,6 +9,7 @@ namespace VisualStudioSnippetGenerator
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<SnippetSerializer>();
+            services.AddTransient<ReplacementService>();
         }
 
         public void Configure(IComponentsApplicationBuilder app)

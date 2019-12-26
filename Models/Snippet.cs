@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -11,16 +11,13 @@ namespace VisualStudioSnippetGenerator.Models
         public VisualStudioSnippet() { }
 
         public VisualStudioSnippet(string title, string shortcut, string language, bool isExpansion, bool isSurroundsWith,
-            string body, string? description = null, string? author = null, IEnumerable<Literal>? literals = null)
+            List<Literal> literals, string body, string? description, string? author)
         {
             CodeSnippet = new CodeSnippet(
                 new Header(title, shortcut, isExpansion, isSurroundsWith, description, author),
                 new Snippet(
                     new Code(language, body), literals));
         }
-
-        [XmlIgnore]
-        public string Xmlns { get; } = "http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet";
 
         public CodeSnippet? CodeSnippet { get; set; }
     }
@@ -89,10 +86,10 @@ namespace VisualStudioSnippetGenerator.Models
     {
         public Snippet() { }
 
-        public Snippet(Code code, IEnumerable<Literal>? literals)
+        public Snippet(Code code, List<Literal>? literals)
         {
             Code = code;
-            Declarations = literals?.ToList();
+            Declarations = literals;
         }
 
         public bool DeclarationsSpecified => Declarations?.Count > 0;
@@ -104,19 +101,44 @@ namespace VisualStudioSnippetGenerator.Models
 
     public class Literal
     {
+        private string _identifier = string.Empty;
+        private string _defaultValue = string.Empty;
+
+        [XmlIgnore]
+        public string UIIdentifier { get; } = Guid.NewGuid().ToString();
+
         public Literal() { }
 
-        public Literal(string id, string defaultValue)
+        public Literal(string identifier, string defaultValue = "")
         {
-            Id = id;
-            DefaultValue = defaultValue;
+            _identifier = identifier;
+            _defaultValue = defaultValue;
         }
 
         [XmlElement("ID")]
-        public string? Id { get; set; }
+        public string Identifier
+        {
+            get => _identifier;
+            set
+            {
+                _identifier = value;
+                Touched = true;
+            }
+        }
 
         [XmlElement("Default")]
-        public string? DefaultValue { get; set; }
+        public string DefaultValue
+        {
+            get => _defaultValue;
+            set
+            {
+                _defaultValue = value;
+                Touched = true;
+            }
+        }
+
+        [XmlIgnore]
+        public bool Touched { get; private set; }
     }
 
     public class Code
