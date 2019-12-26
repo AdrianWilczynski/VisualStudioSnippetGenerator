@@ -207,7 +207,7 @@
         <div class="form-group">
             <label for="@nameof(SnippetText)" class="h5">@nameof(SnippetText).ToSeparateWords()</label>
             <textarea id="@nameof(SnippetText)" @bind="SnippetText" @ref="SnippetTextTextarea"
-                class="form-control border border-primary" rows=29></textarea>
+                class="form-control border border-primary" rows=30></textarea>
         </div>
         <div class="d-flex justify-content-end">
             <button type="button" @onclick="CopyToClipboardAsync" class="btn btn-primary">Copy to Clipboard!</button>
