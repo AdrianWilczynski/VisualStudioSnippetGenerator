@@ -75,68 +75,77 @@
     <div class="col-12 col-md-6">
         <div>
             <div class="d-flex justify-content-between">
-                <h2 class="h5">Literals</h2>
-                <button type="button" @onclick="AddLiteral" title="Add"
+                <h2 class="h5">@nameof(Declarations)</h2>
+                <button type="button" @onclick="AddDeclaration" title="Add"
                     class="btn btn-link btn-sm text-decoration-none text-primary">
                     ➕
                 </button>
             </div>
             <div class="row">
-                @foreach (var (literal, i) in Literals.Select((l, i) => (l, i)))
+                @foreach (var (declaration, i) in Declarations.Select((d, i) => (d, i)))
                 {
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="d-flex justify-content-end">
                             @if (i != 0)
                             {
-                                <button @onclick="@(() => MoveLiteralUp(i))" type="button" title="Move up"
+                                <button @onclick="@(() => MoveDeclarationUp(i))" type="button" title="Move up"
                                     class="btn btn-link btn-sm text-decoration-none text-primary">
                                     ↑
                                 </button>
                             }
-                            @if (i != Literals.Count - 1)
+                            @if (i != Declarations.Count - 1)
                             {
-                                <button @onclick="@(() => MoveLiteralDown(i))" type="button" title="Move down"
+                                <button @onclick="@(() => MoveDeclarationDown(i))" type="button" title="Move down"
                                     class="btn btn-link btn-sm text-decoration-none text-primary">
                                     ↓
                                 </button>
                             }
-                            <button @onclick="@(() => RemoveLiteral(literal))" type="button" title="Remove"
+                            <button @onclick="@(() => RemoveDeclaration(declaration))" type="button" title="Remove"
                                 class="btn btn-link btn-sm text-decoration-none text-danger">
                                 🗙
                             </button>
                         </div>
                         <div class="form-group">
-                            <label for="@nameof(literal.Identifier)-@literal.UIIdentifier" class="small">
-                                @nameof(literal.Identifier)
+                            <label for="@nameof(declaration.Identifier)-@declaration.UIIdentifier" class="small">
+                                @nameof(declaration.Identifier)
                             </label>
-                            <input id="@nameof(literal.Identifier)-@literal.UIIdentifier" value="@literal.Identifier"
-                                @onchange="@(e => SetLiteralIdentifier(literal, (string)e.Value))"
+                            <input id="@nameof(declaration.Identifier)-@declaration.UIIdentifier" value="@declaration.Identifier"
+                                @onchange="@(e => SetDeclarationIdentifier(declaration, (string)e.Value))"
                                 class="form-control form-control-sm border border-primary" />
                         </div>
                         <div class="form-group">
-                            <label for="@nameof(literal.DefaultValue)-@literal.UIIdentifier" class="small">
+                            <label for="@nameof(declaration.DefaultValue)-@declaration.UIIdentifier" class="small">
                                 Default Value
                             </label>
-                            <input id="@nameof(literal.DefaultValue)-@literal.UIIdentifier" value="@literal.DefaultValue"
-                                @oninput="@(e => SetDefaultLiteralValue(literal, (string)e.Value))"
+                            <input id="@nameof(declaration.DefaultValue)-@declaration.UIIdentifier" value="@declaration.DefaultValue"
+                                @oninput="@(e => SetDefaultDeclarationValue(declaration, (string)e.Value))"
                                 class="form-control form-control-sm border border-primary" />
                         </div>
                         <div class="form-group">
-                            <label for="@nameof(literal.ToolTip)-@literal.UIIdentifier" class="small">
-                                @nameof(literal.ToolTip)
+                            <label for="@nameof(declaration.ToolTip)-@declaration.UIIdentifier" class="small">
+                                @nameof(declaration.ToolTip)
                             </label>
-                            <input id="@nameof(literal.ToolTip)-@literal.UIIdentifier" value="@literal.ToolTip"
-                                @oninput="@(e => SetLiteralToolTip(literal, (string)e.Value))"
+                            <input id="@nameof(declaration.ToolTip)-@declaration.UIIdentifier" value="@declaration.ToolTip"
+                                @oninput="@(e => SetDeclarationToolTip(declaration, (string)e.Value))"
+                                class="form-control form-control-sm" />
+                        </div>
+                        <div class="form-group">
+                            <label for="@nameof(declaration.Type)-@declaration.UIIdentifier" class="small">
+                                @nameof(declaration.Type)
+                            </label>
+                            <input id="@nameof(declaration.Type)-@declaration.UIIdentifier"
+                                value="@declaration.Type"
+                                @oninput="@(e => SetDeclarationType(declaration, (string)e.Value))"
                                 class="form-control form-control-sm" />
                         </div>
                         @if(IsCSharp)
                         {
                             <div class="form-group">
-                                <label for="@nameof(literal.Function)-@literal.UIIdentifier" class="small">
-                                    @nameof(literal.Function)
+                                <label for="@nameof(declaration.Function)-@declaration.UIIdentifier" class="small">
+                                    @nameof(declaration.Function)
                                 </label>
-                                <input id="@nameof(literal.Function)-@literal.UIIdentifier" value="@literal.Function"
-                                    @oninput="@(e => SetLiteralFunction(literal, (string)e.Value))"
+                                <input id="@nameof(declaration.Function)-@declaration.UIIdentifier" value="@declaration.Function"
+                                    @oninput="@(e => SetDeclarationFunction(declaration, (string)e.Value))"
                                     list="@nameof(Constants.Functions)" class="form-control form-control-sm" />
                             </div>
 
@@ -150,9 +159,9 @@
                     </div>
                 }
                 
-                @if(Literals.Count == 0)
+                @if(Declarations.Count == 0)
                 {
-                    <p class="pl-3">Input <i>$id$</i> into snippet body or click <i>plus</i> button to add literals.</p>
+                    <p class="pl-3">Input <i>$id$</i> into snippet body or click <i>plus</i> button to add declaration.</p>
                 }
             </div>
         </div>

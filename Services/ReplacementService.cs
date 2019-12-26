@@ -16,7 +16,7 @@ namespace VisualStudioSnippetGenerator.Services
         public string ToReplacement(string identifier)
             => $"${identifier}$";
 
-        public bool IsReplacementIdentifier(string identifier)
+        public bool IsIdentifier(string identifier)
             => Regex.IsMatch(identifier, $"^{IdentifierRegex}$");
 
         public string UpdateReplacements(string body, string oldIdentifier, string newIdentifier)
@@ -27,11 +27,11 @@ namespace VisualStudioSnippetGenerator.Services
                 .Matches(body, ReplacementRegex(IdentifierRegex))
                 .Select(m => m.Groups[1].Value);
 
-        public IEnumerable<Literal> MapReplacementsToLiterals(IEnumerable<string> replacements, IEnumerable<Literal> literals)
-            => literals
+        public IEnumerable<Declaration> MapReplacementsToDeclarations(IEnumerable<string> replacements, IEnumerable<Declaration> declarations)
+            => declarations
                 .Where(l => replacements.Any(r => r == l.Identifier) || l.Touched)
                 .Concat(replacements
-                    .Where(r => !Constants.ReservedKeywords.All.Contains(r) && !literals.Any(l => l.Identifier == r))
-                    .Select(r => new Literal(r)));
+                    .Where(r => !Constants.ReservedKeywords.All.Contains(r) && !declarations.Any(l => l.Identifier == r))
+                    .Select(r => new Declaration(r)));
     }
 }

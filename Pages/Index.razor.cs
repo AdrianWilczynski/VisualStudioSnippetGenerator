@@ -51,13 +51,13 @@ namespace VisualStudioSnippetGenerator.Pages
 
                 var replacements = ReplacementService.MatchReplacements(value);
 
-                SyncBodyWithLiterals(replacements);
+                SyncBodyWithDeclarations(replacements);
                 SyncBodyWithSnippetType(replacements);
                 Sync();
             }
         }
 
-        public List<Literal> Literals { get; set; } = new List<Literal>();
+        public List<Declaration> Declarations { get; set; } = new List<Declaration>();
 
         public string Title
         {
@@ -105,50 +105,53 @@ namespace VisualStudioSnippetGenerator.Pages
 
         public string SnippetText { get; set; } = string.Empty;
 
-        public void SetLiteralIdentifier(Literal literal, string newIdentifier)
+        public void SetDeclarationIdentifier(Declaration declaration, string newIdentifier)
         {
-            if (ReplacementService.IsReplacementIdentifier(newIdentifier))
+            if (ReplacementService.IsIdentifier(newIdentifier))
             {
-                SyncLiteralIdentifierWithBody(literal.Identifier, newIdentifier);
+                SyncDeclarationIdentifierWithBody(declaration.Identifier, newIdentifier);
             }
 
-            literal.Identifier = newIdentifier;
+            declaration.Identifier = newIdentifier;
 
             Sync();
         }
 
-        public void SetDefaultLiteralValue(Literal literal, string newValue)
-            => WithSync(() => literal.DefaultValue = newValue);
+        public void SetDefaultDeclarationValue(Declaration declaration, string newValue)
+            => WithSync(() => declaration.DefaultValue = newValue);
 
-        public void SetLiteralToolTip(Literal literal, string newValue)
-            => WithSync(() => literal.ToolTip = newValue);
+        public void SetDeclarationToolTip(Declaration declaration, string newValue)
+            => WithSync(() => declaration.ToolTip = newValue);
 
-        public void SetLiteralFunction(Literal literal, string newValue)
-            => WithSync(() => literal.Function = newValue);
+        public void SetDeclarationType(Declaration declaration, string newValue)
+            => WithSync(() => declaration.Type = newValue);
 
-        public void RemoveLiteral(Literal literal)
-            => WithSync(() => Literals.Remove(literal));
+        public void SetDeclarationFunction(Declaration declaration, string newValue)
+            => WithSync(() => declaration.Function = newValue);
 
-        public void MoveLiteralUp(int index)
-            => WithSync(() => Literals.Reverse(index - 1, 2));
+        public void RemoveDeclaration(Declaration declaration)
+            => WithSync(() => Declarations.Remove(declaration));
 
-        public void MoveLiteralDown(int index)
-            => WithSync(() => Literals.Reverse(index, 2));
+        public void MoveDeclarationUp(int index)
+            => WithSync(() => Declarations.Reverse(index - 1, 2));
 
-        public void AddLiteral()
-            => WithSync(() => Literals.Add(new Literal()));
+        public void MoveDeclarationDown(int index)
+            => WithSync(() => Declarations.Reverse(index, 2));
+
+        public void AddDeclaration()
+            => WithSync(() => Declarations.Add(new Declaration()));
 
         public void CopyToClipboard()
             => JSRuntime.InvokeVoidAsync("copyToClipboard", SnippetTextTextarea);
 
-        public void SyncBodyWithLiterals(IEnumerable<string> replacements)
+        public void SyncBodyWithDeclarations(IEnumerable<string> replacements)
         {
             if (!SyncEnabled)
             {
                 return;
             }
 
-            Literals = ReplacementService.MapReplacementsToLiterals(replacements, Literals)
+            Declarations = ReplacementService.MapReplacementsToDeclarations(replacements, Declarations)
                 .ToList();
         }
 
@@ -162,7 +165,7 @@ namespace VisualStudioSnippetGenerator.Pages
             IsSurroundsWith = replacements.Contains(Constants.ReservedKeywords.Selected);
         }
 
-        public void SyncLiteralIdentifierWithBody(string oldIdentifier, string newIdentifier)
+        public void SyncDeclarationIdentifierWithBody(string oldIdentifier, string newIdentifier)
         {
             if (!SyncEnabled)
             {
@@ -180,7 +183,7 @@ namespace VisualStudioSnippetGenerator.Pages
 
                 SnippetText = SnippetSerializer.Serialize(
                     new VisualStudioSnippet(Title, Shortcut, Language, IsExpansion, IsSurroundsWith,
-                        Literals, Body, Description, Author));
+                        Declarations, Body, Description, Author));
             }
             catch (Exception exception)
             {

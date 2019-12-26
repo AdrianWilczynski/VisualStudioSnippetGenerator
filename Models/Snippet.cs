@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -11,7 +12,7 @@ namespace VisualStudioSnippetGenerator.Models
         public VisualStudioSnippet() { }
 
         public VisualStudioSnippet(string title, string shortcut, string language, bool isExpansion, bool isSurroundsWith,
-            List<Literal> literals, string body, string? description, string? author)
+            List<Declaration> literals, string body, string? description, string? author)
         {
             CodeSnippet = new CodeSnippet(
                 new Header(title, shortcut, isExpansion, isSurroundsWith, description, author),
@@ -98,33 +99,55 @@ namespace VisualStudioSnippetGenerator.Models
 
     public class Snippet
     {
+        private List<Declaration> _declarations = new List<Declaration>();
+
         public Snippet() { }
 
-        public Snippet(Code code, List<Literal>? literals)
+        public Snippet(Code code, List<Declaration> literals)
         {
             Code = code;
             Declarations = literals;
         }
 
-        public bool DeclarationsSpecified => Declarations?.Count > 0;
+        public bool DeclarationsSpecified => _declarations.Count > 0;
 
-        public List<Literal>? Declarations { get; set; }
+        [XmlArray]
+        [XmlArrayItem(nameof(Literal), typeof(Literal))]
+        [XmlArrayItem(nameof(Object), typeof(Object))]
+        public List<Declaration> Declarations
+        {
+            get => _declarations.Select(d => d.Type switch
+            {
+                null => new Literal(d),
+                _ => (Declaration)new Object(d)
+            }).ToList();
+            set => _declarations = value;
+        }
 
         public Code? Code { get; set; }
     }
 
-    public class Literal
+    public class Declaration
     {
         private string _identifier = string.Empty;
         private string _defaultValue = string.Empty;
         private string? _toolTip;
         private string? _function;
+        private string? _type;
 
-        public Literal() { }
+        public Declaration() { }
 
-        public Literal(string identifier)
+        public Declaration(string identifier)
         {
             _identifier = identifier;
+        }
+
+        public Declaration(Declaration declaration) : this(declaration.Identifier)
+        {
+            _defaultValue = declaration.DefaultValue;
+            _toolTip = declaration.ToolTip;
+            _function = declaration.Function;
+            _type = declaration.Type;
         }
 
         [XmlIgnore]
@@ -172,8 +195,32 @@ namespace VisualStudioSnippetGenerator.Models
             }
         }
 
+        public string? Type
+        {
+            get => !string.IsNullOrWhiteSpace(_type) ? _type : null;
+            set
+            {
+                _type = value;
+                Touched = true;
+            }
+        }
+
         [XmlIgnore]
         public bool Touched { get; set; }
+    }
+
+    public class Literal : Declaration
+    {
+        public Literal() { }
+
+        public Literal(Declaration declaration) : base(declaration) { }
+    }
+
+    public class Object : Declaration
+    {
+        public Object() { }
+
+        public Object(Declaration declaration) : base(declaration) { }
     }
 
     public class Code
