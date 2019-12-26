@@ -1,0 +1,20 @@
+{
+  "version": "1.0",
+  "defaultProvider": "jsdelivr",
+  "libraries": [
+    {
+      "library": "bootstrap@4.4.1",
+      "destination": "wwwroot\\lib\\bootstrap",
+      "files": [
+        "dist/css/bootstrap.min.css"
+      ]
+    },
+    {
+      "library": "ThemesGuide/top-hat@2274176073d2e4783c78df080c6c3396e2abc2b4",
+      "destination": "wwwroot\\lib\\ThemesGuide/top-hat",
+      "files": [
+        "dist/graymor/theme.min.css"
+      ]
+    }
+  ]
+}
