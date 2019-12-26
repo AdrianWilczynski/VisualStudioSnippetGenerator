@@ -136,52 +136,52 @@
                             </button>
                         </div>
                         <div class="form-check form-check-inline d-flex justify-content-end mr-2">
-                            <label class="form-check-label small mr-2" for="@declaration.UIIdentifier">
+                            <label class="form-check-label small mr-2" for="@nameof(@declaration.Editable)-@declaration.UIIdentifier">
                                 @nameof(declaration.Editable)
                             </label>
-                            <input id="@declaration.UIIdentifier" type="checkbox" 
+                            <input id="@nameof(@declaration.Editable)-@declaration.UIIdentifier" type="checkbox" 
                                 checked="@declaration.Editable" @onchange="@(e => SetDeclarationEditable(declaration, (bool)e.Value))"
                                 class="form-check-input mr-0" />
                         </div>
                         <div class="form-group">
-                            <label for="@declaration.UIIdentifier" class="small">
+                            <label for="@nameof(@declaration.Identifier)-@declaration.UIIdentifier" class="small">
                                 @nameof(declaration.Identifier)
                             </label>
-                            <FocusedInput id="@declaration.UIIdentifier" value="@declaration.Identifier" Focus="declaration.Focus"
+                            <FocusedInput id="@(nameof(declaration.Identifier) + '-' + declaration.UIIdentifier)" value="@declaration.Identifier" Focus="declaration.Focus"
                                 @onchange="@(e => SetDeclarationIdentifier(declaration, (string)e.Value))"
                                 class="form-control form-control-sm border border-primary" />
                         </div>
                         <div class="form-group">
-                            <label for="@declaration.UIIdentifier" class="small">
+                            <label for="@nameof(@declaration.DefaultValue)-@declaration.UIIdentifier" class="small">
                                 @nameof(declaration.DefaultValue).ToSeparateWords()
                             </label>
-                            <input id="@declaration.UIIdentifier" value="@declaration.DefaultValue"
+                            <input id="@nameof(@declaration.DefaultValue)-@declaration.UIIdentifier" value="@declaration.DefaultValue"
                                 @oninput="@(e => SetDefaultDeclarationValue(declaration, (string)e.Value))"
                                 class="form-control form-control-sm border border-primary" />
                         </div>
                         <div class="form-group">
-                            <label for="@declaration.UIIdentifier" class="small">
+                            <label for="@nameof(@declaration.ToolTip)-@declaration.UIIdentifier" class="small">
                                 @nameof(declaration.ToolTip)
                             </label>
-                            <input id="@declaration.UIIdentifier" value="@declaration.ToolTip"
+                            <input id="@nameof(@declaration.ToolTip)-@declaration.UIIdentifier" value="@declaration.ToolTip"
                                 @oninput="@(e => SetDeclarationToolTip(declaration, (string)e.Value))"
                                 class="form-control form-control-sm" />
                         </div>
                         <div class="form-group">
-                            <label for="@declaration.UIIdentifier" class="small">
+                            <label for="@nameof(@declaration.Type)-@declaration.UIIdentifier" class="small">
                                 @nameof(declaration.Type)
                             </label>
-                            <input id="@declaration.UIIdentifier" value="@declaration.Type"
+                            <input id="@nameof(@declaration.Type)-@declaration.UIIdentifier" value="@declaration.Type"
                                 @oninput="@(e => SetDeclarationType(declaration, (string)e.Value))"
                                 class="form-control form-control-sm" />
                         </div>
                         @if(IsCSharp)
                         {
                             <div class="form-group">
-                                <label for="@declaration.UIIdentifier" class="small">
+                                <label for="@nameof(@declaration.Function)-@declaration.UIIdentifier" class="small">
                                     @nameof(declaration.Function)
                                 </label>
-                                <input id="@declaration.UIIdentifier" value="@declaration.Function"
+                                <input id="@nameof(@declaration.Function)-@declaration.UIIdentifier" value="@declaration.Function"
                                     @oninput="@(e => SetDeclarationFunction(declaration, (string)e.Value))"
                                     list="@nameof(Constants.Functions)" class="form-control form-control-sm" />
                             </div>
