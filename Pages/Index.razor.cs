@@ -33,6 +33,7 @@ namespace VisualStudioSnippetGenerator.Pages
             set
             {
                 _snippetSerializer = value;
+
                 SyncWithSnippetText();
             }
         }
@@ -70,6 +71,7 @@ namespace VisualStudioSnippetGenerator.Pages
             set
             {
                 _title = value;
+
                 SyncWithSnippetText();
             }
         }
@@ -80,6 +82,7 @@ namespace VisualStudioSnippetGenerator.Pages
             set
             {
                 _shortcut = value;
+
                 SyncWithSnippetText();
             }
         }
@@ -90,6 +93,7 @@ namespace VisualStudioSnippetGenerator.Pages
             set
             {
                 _language = value;
+
                 SyncWithSnippetText();
             }
         }
@@ -100,6 +104,7 @@ namespace VisualStudioSnippetGenerator.Pages
             set
             {
                 _description = value;
+
                 SyncWithSnippetText();
             }
         }
@@ -110,6 +115,7 @@ namespace VisualStudioSnippetGenerator.Pages
             set
             {
                 _author = value;
+
                 SyncWithSnippetText();
             }
         }
@@ -120,6 +126,7 @@ namespace VisualStudioSnippetGenerator.Pages
             set
             {
                 _isExpansion = value;
+
                 SyncWithSnippetText();
             }
         }
@@ -130,6 +137,7 @@ namespace VisualStudioSnippetGenerator.Pages
             set
             {
                 _isSurroundsWith = value;
+
                 SyncWithSnippetText();
             }
         }
@@ -144,24 +152,28 @@ namespace VisualStudioSnippetGenerator.Pages
             }
 
             literal.Id = newValue;
+
             SyncWithSnippetText();
         }
 
         public void OnLiteralDefaultValueInput(LiteralViewModel literal, string newValue)
         {
             literal.DefaultValue = newValue;
+
             SyncWithSnippetText();
         }
 
         public void OnRemoveLiteralClick(LiteralViewModel literal)
         {
             Literals.Remove(literal);
+
             SyncWithSnippetText();
         }
 
         public void OnAddLiteralClick()
         {
             Literals.Add(new LiteralViewModel());
+
             SyncWithSnippetText();
         }
 
@@ -170,26 +182,32 @@ namespace VisualStudioSnippetGenerator.Pages
 
         public void SyncBodyWithLiterals(IEnumerable<string> replacements)
         {
-            if (SyncEnabled)
+            if (!SyncEnabled)
             {
-                Literals = MapReplacementsToLiterals(replacements, Literals);
+                return;
             }
+
+            Literals = MapReplacementsToLiterals(replacements, Literals);
         }
 
         public void SyncBodyWithSnippetType(IEnumerable<string> replacements)
         {
-            if (SyncEnabled)
+            if (!SyncEnabled)
             {
-                IsSurroundsWith = replacements.Contains(Constants.ReservedKeywords.Selected);
+                return;
             }
+
+            IsSurroundsWith = replacements.Contains(Constants.ReservedKeywords.Selected);
         }
 
         public void SyncLiteralIdWithBody(string oldValue, string newValue)
         {
-            if (SyncEnabled)
+            if (!SyncEnabled)
             {
-                _body = Regex.Replace(_body, $@"(?<!\$)\${Regex.Escape(oldValue)}\$(?!\$)", AsReplacement(newValue));
+                return;
             }
+
+            _body = Regex.Replace(_body, $@"(?<!\$)\${Regex.Escape(oldValue)}\$(?!\$)", AsReplacement(newValue));
         }
 
         public void SyncWithSnippetText()
