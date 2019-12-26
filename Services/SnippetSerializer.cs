@@ -1,5 +1,6 @@
 using System.IO;
 using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 using VisualStudioSnippetGenerator.Models;
 
@@ -21,10 +22,17 @@ namespace VisualStudioSnippetGenerator.Services
             var xmlNamespaces = new XmlSerializerNamespaces();
             xmlNamespaces.Add(string.Empty, DefaultNamespace);
 
+            var settings = new XmlWriterSettings
+            {
+                IndentChars = new string(' ', 4),
+                Indent = true
+            };
+
             using var memoryStream = new MemoryStream();
             using var streamWriter = new StreamWriter(memoryStream, Encoding.UTF8);
+            using var xmlWriter = XmlWriter.Create(streamWriter, settings);
 
-            _xmlSerializer.Serialize(streamWriter, snippet, xmlNamespaces);
+            _xmlSerializer.Serialize(xmlWriter, snippet, xmlNamespaces);
             return Encoding.UTF8.GetString(memoryStream.ToArray());
         }
     }
