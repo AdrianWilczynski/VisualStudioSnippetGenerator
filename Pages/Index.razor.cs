@@ -14,7 +14,7 @@ namespace VisualStudioSnippetGenerator.Pages
         private string? _description;
         private string? _author;
         private string _language = string.Empty;
-        private string _shortcut = string.Empty;
+        private string? _shortcut;
         private string _title = string.Empty;
         private bool _isExpansion = true;
         private bool _isSurroundsWith;
@@ -65,7 +65,7 @@ namespace VisualStudioSnippetGenerator.Pages
             set => SetThenSync(value, ref _title);
         }
 
-        public string Shortcut
+        public string? Shortcut
         {
             get => _shortcut;
             set => SetThenSync(value, ref _shortcut);

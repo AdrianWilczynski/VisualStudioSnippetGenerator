@@ -11,7 +11,7 @@ namespace VisualStudioSnippetGenerator.Models
     {
         public VisualStudioSnippet() { }
 
-        public VisualStudioSnippet(string title, string shortcut, string language, bool isExpansion, bool isSurroundsWith,
+        public VisualStudioSnippet(string title, string? shortcut, string language, bool isExpansion, bool isSurroundsWith,
             List<Declaration> literals, string body, string? description, string? author)
         {
             CodeSnippet = new CodeSnippet(
@@ -45,10 +45,11 @@ namespace VisualStudioSnippetGenerator.Models
     {
         private string? _description;
         private string? _author;
+        private string? _shortcut;
 
         public Header() { }
 
-        public Header(string title, string shortcut, bool isExpansion, bool isSurroundsWith, string? description, string? author)
+        public Header(string title, string? shortcut, bool isExpansion, bool isSurroundsWith, string? description, string? author)
         {
             Title = title;
             Shortcut = shortcut;
@@ -66,7 +67,12 @@ namespace VisualStudioSnippetGenerator.Models
         }
 
         public string? Title { get; set; }
-        public string? Shortcut { get; set; }
+
+        public string? Shortcut
+        {
+            get => string.IsNullOrWhiteSpace(_shortcut) ? null : _shortcut;
+            set => _shortcut = value;
+        }
 
         public string? Description
         {
@@ -80,6 +86,8 @@ namespace VisualStudioSnippetGenerator.Models
             get => string.IsNullOrWhiteSpace(_author) ? null : _author;
             set => _author = value;
         }
+
+        public bool SnippetTypesSpecified => SnippetTypes.Count > 0;
 
         public List<SnippetType> SnippetTypes { get; set; } = new List<SnippetType>();
     }
