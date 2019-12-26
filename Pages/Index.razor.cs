@@ -4,6 +4,9 @@ using System.Text.RegularExpressions;
 using VisualStudioSnippetGenerator.ViewModels;
 using VisualStudioSnippetGenerator.Services;
 using VisualStudioSnippetGenerator.Models;
+using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
+using System;
 
 namespace VisualStudioSnippetGenerator.Pages
 {
@@ -20,14 +23,27 @@ namespace VisualStudioSnippetGenerator.Pages
         private bool _isExpansion = true;
         private bool _isSurroundsWith;
 
-        private readonly SnippetSerializer _snippetSerializer;
+        private SnippetSerializer? _snippetSerializer;
 
-        public Index()
+#nullable disable
+        [Inject]
+        private SnippetSerializer SnippetSerializer
         {
-            _snippetSerializer = new SnippetSerializer();
-
-            SyncWithSnippetText();
+            get => _snippetSerializer;
+            set
+            {
+                _snippetSerializer = value;
+                SyncWithSnippetText();
+            }
         }
+
+        [Inject]
+        public IJSRuntime JSRuntime { get; set; }
+#nullable enable
+
+        private ElementReference SnippetTextTextarea { get; set; }
+
+        public string? Error { get; set; }
 
         public bool SyncEnabled { get; set; } = true;
 
@@ -149,6 +165,9 @@ namespace VisualStudioSnippetGenerator.Pages
             SyncWithSnippetText();
         }
 
+        public void OnCopyToClipboardClick()
+            => JSRuntime.InvokeVoidAsync("copyToClipboard", SnippetTextTextarea);
+
         public void SyncBodyWithLiterals(IEnumerable<string> replacements)
         {
             if (SyncEnabled)
@@ -174,9 +193,18 @@ namespace VisualStudioSnippetGenerator.Pages
         }
 
         public void SyncWithSnippetText()
-            => SnippetText = _snippetSerializer.Serialize(
+        {
+            try
+            {
+                SnippetText = SnippetSerializer.Serialize(
                     new VisualStudioSnippet(Title, Shortcut, Language, IsExpansion, IsSurroundsWith, Body, Description, Author,
                         Literals.Select(l => new Literal(l.Id, l.DefaultValue))));
+            }
+            catch (Exception exception)
+            {
+                Error = exception.Message;
+            }
+        }
 
         public static string AsReplacement(string id)
             => $"${id}$";

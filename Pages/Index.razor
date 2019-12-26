@@ -2,6 +2,12 @@
 
 <form class="row">
         <div class="col-12 col-md-6">
+            @if (Error != null)
+            {
+                <div class="alert alert-danger">
+                    @Error
+                </div>
+            }
             <div class="row">
                 <div class="form-group col-12 col-lg-6">
                     <label for="@nameof(Title)" class="h5">@nameof(Title)</label>
@@ -109,7 +115,10 @@
         </div>
         <div class="form-group">
             <label for="@nameof(SnippetText)" class="h5">Snippet Text</label>
-            <textarea id="@nameof(SnippetText)" @bind="SnippetText" class="form-control border border-primary" rows=30></textarea>
+            <textarea id="@nameof(SnippetText)" @bind="SnippetText" @ref="SnippetTextTextarea" class="form-control border border-primary" rows=30></textarea>
+        </div>
+        <div class="d-flex justify-content-end">
+            <button type="button" @onclick="OnCopyToClipboardClick" class="btn btn-primary">Copy to Clipboard!</button>
         </div>
     </div>
 </form>
