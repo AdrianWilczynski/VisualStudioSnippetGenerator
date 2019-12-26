@@ -4,18 +4,23 @@ namespace VisualStudioSnippetGenerator
 {
     public static class Constants
     {
-        public static IEnumerable<string> Languages => new[]
+        public static class Languages
         {
-            "CSharp",
-            "TypeScript",
-            "JavaScript",
-            "CPP",
-            "VB",
-            "XML",
-            "HTML",
-            "CSS",
-            "SQL"
-        };
+            public const string CSharp = "CSharp";
+
+            public static IEnumerable<string> All => new[]
+            {
+                CSharp,
+                "TypeScript",
+                "JavaScript",
+                "CPP",
+                "VB",
+                "XML",
+                "HTML",
+                "CSS",
+                "SQL"
+            };
+        }
 
         public static class ReservedKeywords
         {

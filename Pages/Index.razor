@@ -27,7 +27,7 @@
                         list="@nameof(Constants.Languages)" class="form-control border border-primary" />
 
                     <datalist id="@nameof(Constants.Languages)">
-                        @foreach (var language in Constants.Languages)
+                        @foreach (var language in Constants.Languages.All)
                         {
                             <option value="@language" />
                         }
@@ -129,7 +129,7 @@
                                 @oninput="@(e => SetLiteralToolTip(literal, (string)e.Value))"
                                 class="form-control form-control-sm" />
                         </div>
-                        @if(IsCsharp)
+                        @if(IsCSharp)
                         {
                             <div class="form-group">
                                 <label for="@nameof(literal.Function)-@literal.UIIdentifier" class="small">

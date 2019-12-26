@@ -101,7 +101,7 @@ namespace VisualStudioSnippetGenerator.Pages
             set => SetThenSync(value, ref _isSurroundsWith);
         }
 
-        public bool IsCsharp => Language.Equals("CSharp", StringComparison.OrdinalIgnoreCase);
+        public bool IsCSharp => Language.Equals(Constants.Languages.CSharp, StringComparison.OrdinalIgnoreCase);
 
         public string SnippetText { get; set; } = string.Empty;
 
@@ -176,6 +176,8 @@ namespace VisualStudioSnippetGenerator.Pages
         {
             try
             {
+                Error = null;
+
                 SnippetText = SnippetSerializer.Serialize(
                     new VisualStudioSnippet(Title, Shortcut, Language, IsExpansion, IsSurroundsWith,
                         Literals, Body, Description, Author));
