@@ -79,13 +79,13 @@ namespace VisualStudioSnippetGenerator.Pages
 
         public string? Description
         {
-            get => string.IsNullOrWhiteSpace(_description) ? null : _description;
+            get => _description;
             set => SetThenSync(value, ref _description);
         }
 
         public string? Author
         {
-            get => string.IsNullOrWhiteSpace(_author) ? null : _author;
+            get => _author;
             set => SetThenSync(value, ref _author);
         }
 
@@ -118,8 +118,17 @@ namespace VisualStudioSnippetGenerator.Pages
         public void SetDefaultLiteralValue(Literal literal, string newValue)
             => WithSync(() => literal.DefaultValue = newValue);
 
+        public void SetLiteralToolTip(Literal literal, string newValue)
+            => WithSync(() => literal.ToolTip = newValue);
+
         public void RemoveLiteral(Literal literal)
             => WithSync(() => Literals.Remove(literal));
+
+        public void MoveLiteralUp(int index)
+            => WithSync(() => Literals.Reverse(index - 1, 2));
+
+        public void MoveLiteralDown(int index)
+            => WithSync(() => Literals.Reverse(index, 2));
 
         public void AddLiteral()
             => WithSync(() => Literals.Add(new Literal()));

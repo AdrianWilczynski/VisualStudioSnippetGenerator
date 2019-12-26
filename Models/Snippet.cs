@@ -42,6 +42,9 @@ namespace VisualStudioSnippetGenerator.Models
 
     public class Header
     {
+        private string? _description;
+        private string? _author;
+
         public Header() { }
 
         public Header(string title, string shortcut, bool isExpansion, bool isSurroundsWith, string? description, string? author)
@@ -63,8 +66,19 @@ namespace VisualStudioSnippetGenerator.Models
 
         public string? Title { get; set; }
         public string? Shortcut { get; set; }
-        public string? Description { get; set; }
-        public string? Author { get; set; }
+
+        public string? Description
+        {
+            get => string.IsNullOrWhiteSpace(_description) ? null : _description;
+            set => _description = value;
+        }
+
+        public string? Author
+
+        {
+            get => string.IsNullOrWhiteSpace(_author) ? null : _author;
+            set => _author = value;
+        }
 
         public List<SnippetType> SnippetTypes { get; set; } = new List<SnippetType>();
     }
@@ -103,6 +117,7 @@ namespace VisualStudioSnippetGenerator.Models
     {
         private string _identifier = string.Empty;
         private string _defaultValue = string.Empty;
+        private string? _toolTip;
 
         [XmlIgnore]
         public string UIIdentifier { get; } = Guid.NewGuid().ToString();
@@ -137,8 +152,18 @@ namespace VisualStudioSnippetGenerator.Models
             }
         }
 
+        public string? ToolTip
+        {
+            get => !string.IsNullOrWhiteSpace(_toolTip) ? _toolTip : null;
+            set
+            {
+                _toolTip = value;
+                Touched = true;
+            }
+        }
+
         [XmlIgnore]
-        public bool Touched { get; private set; }
+        public bool Touched { get; set; }
     }
 
     public class Code

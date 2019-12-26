@@ -81,10 +81,24 @@
                 </button>
             </div>
             <div class="row">
-                @foreach (var literal in Literals)
+                @foreach (var (literal, i) in Literals.Select((l, i) => (l, i)))
                 {
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="d-flex justify-content-end">
+                            @if (i != 0)
+                            {
+                                <button @onclick="@(() => MoveLiteralUp(i))" type="button" title="Move up"
+                                    class="btn btn-link btn-sm text-decoration-none text-primary">
+                                    ↑
+                                </button>
+                            }
+                            @if (i != Literals.Count - 1)
+                            {
+                                <button @onclick="@(() => MoveLiteralDown(i))" type="button" title="Move down"
+                                    class="btn btn-link btn-sm text-decoration-none text-primary">
+                                    ↓
+                                </button>
+                            }
                             <button @onclick="@(() => RemoveLiteral(literal))" type="button" title="Remove"
                                 class="btn btn-link btn-sm text-decoration-none text-danger">
                                 🗙
@@ -105,6 +119,14 @@
                             <input id="@nameof(literal.DefaultValue)-@literal.UIIdentifier" value="@literal.DefaultValue"
                                 @oninput="@(e => SetDefaultLiteralValue(literal, (string)e.Value))"
                                 class="form-control form-control-sm border border-primary" />
+                        </div>
+                        <div class="form-group">
+                            <label for="@nameof(literal.ToolTip)-@literal.UIIdentifier" class="small">
+                                @nameof(literal.ToolTip)
+                            </label>
+                            <input id="@nameof(literal.ToolTip)-@literal.UIIdentifier" value="@literal.ToolTip"
+                                @oninput="@(e => SetLiteralToolTip(literal, (string)e.Value))"
+                                class="form-control form-control-sm" />
                         </div>
                     </div>
                 }
