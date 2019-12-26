@@ -74,7 +74,7 @@
         <div>
             <div class="d-flex justify-content-between">
                 <h2 class="h5">Literals</h2>
-                <button type="button" @onclick="OnAddLiteralClick" title="Add"
+                <button type="button" @onclick="AddLiteral" title="Add"
                     class="btn btn-link btn-sm text-decoration-none text-primary">
                     ➕
                 </button>
@@ -84,7 +84,7 @@
                 {
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="d-flex justify-content-end">
-                            <button @onclick="@(() => OnRemoveLiteralClick(literal))" type="button" title="Remove"
+                            <button @onclick="@(() => RemoveLiteral(literal))" type="button" title="Remove"
                                 class="btn btn-link btn-sm text-decoration-none text-danger">
                                 🗙
                             </button>
@@ -94,7 +94,7 @@
                                 @nameof(literal.Id)
                             </label>
                             <input id="@nameof(literal.Id)-@literal.Key" value="@literal.Id"
-                                @onchange="@(e => OnLiteralIdChange(literal, (string)e.Value))"
+                                @onchange="@(e => SetLiteralId(literal, (string)e.Value))"
                                 class="form-control form-control-sm border border-primary" />
                         </div>
                         <div class="form-group">
@@ -102,7 +102,7 @@
                                 Default Value
                             </label>
                             <input id="@nameof(literal.DefaultValue)-@literal.Key" value="@literal.DefaultValue"
-                                @oninput="@(e => OnLiteralDefaultValueInput(literal, (string)e.Value))"
+                                @oninput="@(e => SetDefaultLiteralValue(literal, (string)e.Value))"
                                 class="form-control form-control-sm border border-primary" />
                         </div>
                     </div>
@@ -120,7 +120,7 @@
                 class="form-control border border-primary" rows=29></textarea>
         </div>
         <div class="d-flex justify-content-end">
-            <button type="button" @onclick="OnCopyToClipboardClick" class="btn btn-primary">Copy to Clipboard!</button>
+            <button type="button" @onclick="CopyToClipboard" class="btn btn-primary">Copy to Clipboard!</button>
         </div>
     </div>
 </form>

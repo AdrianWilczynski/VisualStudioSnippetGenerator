@@ -92,12 +92,12 @@ namespace VisualStudioSnippetGenerator.Models
         public Snippet(Code code, IEnumerable<Literal>? literals)
         {
             Code = code;
-            Declarations = literals?.ToArray();
+            Declarations = literals?.ToList();
         }
 
-        public bool DeclarationsSpecified => Declarations?.Length > 0;
+        public bool DeclarationsSpecified => Declarations?.Count > 0;
 
-        public Literal[]? Declarations { get; set; }
+        public List<Literal>? Declarations { get; set; }
 
         public Code? Code { get; set; }
     }

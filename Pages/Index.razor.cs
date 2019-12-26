@@ -23,19 +23,15 @@ namespace VisualStudioSnippetGenerator.Pages
         private bool _isExpansion = true;
         private bool _isSurroundsWith;
 
-        private SnippetSerializer? _snippetSerializer;
 
 #nullable disable
+        private SnippetSerializer _snippetSerializer;
+
         [Inject]
         private SnippetSerializer SnippetSerializer
         {
             get => _snippetSerializer;
-            set
-            {
-                _snippetSerializer = value;
-
-                SyncWithSnippetText();
-            }
+            set => SetThenSync(value, ref _snippetSerializer);
         }
 
         [Inject]
@@ -68,83 +64,48 @@ namespace VisualStudioSnippetGenerator.Pages
         public string Title
         {
             get => _title;
-            set
-            {
-                _title = value;
-
-                SyncWithSnippetText();
-            }
+            set => SetThenSync(value, ref _title);
         }
 
         public string Shortcut
         {
             get => _shortcut;
-            set
-            {
-                _shortcut = value;
-
-                SyncWithSnippetText();
-            }
+            set => SetThenSync(value, ref _shortcut);
         }
 
         public string Language
         {
             get => _language;
-            set
-            {
-                _language = value;
-
-                SyncWithSnippetText();
-            }
+            set => SetThenSync(value, ref _language);
         }
 
         public string? Description
         {
             get => string.IsNullOrWhiteSpace(_description) ? null : _description;
-            set
-            {
-                _description = value;
-
-                SyncWithSnippetText();
-            }
+            set => SetThenSync(value, ref _description);
         }
 
         public string? Author
         {
             get => string.IsNullOrWhiteSpace(_author) ? null : _author;
-            set
-            {
-                _author = value;
-
-                SyncWithSnippetText();
-            }
+            set => SetThenSync(value, ref _author);
         }
 
         public bool IsExpansion
         {
             get => _isExpansion;
-            set
-            {
-                _isExpansion = value;
-
-                SyncWithSnippetText();
-            }
+            set => SetThenSync(value, ref _isExpansion);
         }
 
         public bool IsSurroundsWith
         {
             get => _isSurroundsWith;
-            set
-            {
-                _isSurroundsWith = value;
-
-                SyncWithSnippetText();
-            }
+            set => SetThenSync(value, ref _isSurroundsWith);
         }
 
         public string SnippetText { get; set; } = string.Empty;
 
-        public void OnLiteralIdChange(LiteralViewModel literal, string newValue)
+        public void SetLiteralId(LiteralViewModel literal, string newValue)
         {
             if (IsReplacement(AsReplacement(newValue)))
             {
@@ -156,28 +117,16 @@ namespace VisualStudioSnippetGenerator.Pages
             SyncWithSnippetText();
         }
 
-        public void OnLiteralDefaultValueInput(LiteralViewModel literal, string newValue)
-        {
-            literal.DefaultValue = newValue;
+        public void SetDefaultLiteralValue(LiteralViewModel literal, string newValue)
+            => WithSync(() => literal.DefaultValue = newValue);
 
-            SyncWithSnippetText();
-        }
+        public void RemoveLiteral(LiteralViewModel literal)
+            => WithSync(() => Literals.Remove(literal));
 
-        public void OnRemoveLiteralClick(LiteralViewModel literal)
-        {
-            Literals.Remove(literal);
+        public void AddLiteral()
+            => WithSync(() => Literals.Add(new LiteralViewModel()));
 
-            SyncWithSnippetText();
-        }
-
-        public void OnAddLiteralClick()
-        {
-            Literals.Add(new LiteralViewModel());
-
-            SyncWithSnippetText();
-        }
-
-        public void OnCopyToClipboardClick()
+        public void CopyToClipboard()
             => JSRuntime.InvokeVoidAsync("copyToClipboard", SnippetTextTextarea);
 
         public void SyncBodyWithLiterals(IEnumerable<string> replacements)
@@ -210,7 +159,7 @@ namespace VisualStudioSnippetGenerator.Pages
             _body = Regex.Replace(_body, $@"(?<!\$)\${Regex.Escape(oldValue)}\$(?!\$)", AsReplacement(newValue));
         }
 
-        public void SyncWithSnippetText()
+        private void SyncWithSnippetText()
         {
             try
             {
@@ -224,18 +173,30 @@ namespace VisualStudioSnippetGenerator.Pages
             }
         }
 
-        public static string AsReplacement(string id)
+        private void SetThenSync<T>(T value, ref T backingField)
+        {
+            backingField = value;
+            SyncWithSnippetText();
+        }
+
+        private void WithSync(Action action)
+        {
+            action();
+            SyncWithSnippetText();
+        }
+
+        private static string AsReplacement(string id)
             => $"${id}$";
 
-        public static bool IsReplacement(string replacement)
+        private static bool IsReplacement(string replacement)
             => Regex.IsMatch(replacement, $"^{ReplacementRegex}$");
 
-        public static IEnumerable<string> MatchReplacements(string body)
+        private static IEnumerable<string> MatchReplacements(string body)
             => Regex
                 .Matches(body, ReplacementRegex)
                 .Select(m => m.Groups[1].Value);
 
-        public static List<LiteralViewModel> MapReplacementsToLiterals(
+        private static List<LiteralViewModel> MapReplacementsToLiterals(
             IEnumerable<string> replacements, IEnumerable<LiteralViewModel> literals)
             => literals
                 .Where(l => replacements.Any(r => r == l.Id) || l.Touched)
