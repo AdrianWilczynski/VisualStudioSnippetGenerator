@@ -1,0 +1,2 @@
+libman restore
+dotnet build
