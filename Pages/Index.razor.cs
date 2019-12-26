@@ -101,6 +101,8 @@ namespace VisualStudioSnippetGenerator.Pages
             set => SetThenSync(value, ref _isSurroundsWith);
         }
 
+        public bool IsCsharp => Language.Equals("CSharp", StringComparison.OrdinalIgnoreCase);
+
         public string SnippetText { get; set; } = string.Empty;
 
         public void SetLiteralIdentifier(Literal literal, string newIdentifier)
@@ -120,6 +122,9 @@ namespace VisualStudioSnippetGenerator.Pages
 
         public void SetLiteralToolTip(Literal literal, string newValue)
             => WithSync(() => literal.ToolTip = newValue);
+
+        public void SetLiteralFunction(Literal literal, string newValue)
+            => WithSync(() => literal.Function = newValue);
 
         public void RemoveLiteral(Literal literal)
             => WithSync(() => Literals.Remove(literal));

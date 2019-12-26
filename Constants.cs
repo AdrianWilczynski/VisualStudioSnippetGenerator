@@ -34,5 +34,12 @@ namespace VisualStudioSnippetGenerator
             public const string Expansion = "Expansion";
             public const string SurroundsWith = "SurroundsWith";
         }
+
+        public static IEnumerable<string> Functions => new[]
+        {
+            "GenerateSwitchCases($expression$)",
+            "ClassName()",
+            "SimpleTypeName(global::System.Console)"
+        };
     }
 }

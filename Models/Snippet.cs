@@ -118,17 +118,17 @@ namespace VisualStudioSnippetGenerator.Models
         private string _identifier = string.Empty;
         private string _defaultValue = string.Empty;
         private string? _toolTip;
-
-        [XmlIgnore]
-        public string UIIdentifier { get; } = Guid.NewGuid().ToString();
+        private string? _function;
 
         public Literal() { }
 
-        public Literal(string identifier, string defaultValue = "")
+        public Literal(string identifier)
         {
             _identifier = identifier;
-            _defaultValue = defaultValue;
         }
+
+        [XmlIgnore]
+        public string UIIdentifier { get; } = Guid.NewGuid().ToString();
 
         [XmlElement("ID")]
         public string Identifier
@@ -158,6 +158,16 @@ namespace VisualStudioSnippetGenerator.Models
             set
             {
                 _toolTip = value;
+                Touched = true;
+            }
+        }
+
+        public string? Function
+        {
+            get => !string.IsNullOrWhiteSpace(_function) ? _function : null;
+            set
+            {
+                _function = value;
                 Touched = true;
             }
         }

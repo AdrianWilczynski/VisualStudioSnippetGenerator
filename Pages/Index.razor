@@ -9,6 +9,7 @@
                     @Error
                 </div>
             }
+            
             <div class="row">
                 <div class="form-group col-12 col-lg-6">
                     <label for="@nameof(Title)" class="h5">@nameof(Title)</label>
@@ -128,6 +129,24 @@
                                 @oninput="@(e => SetLiteralToolTip(literal, (string)e.Value))"
                                 class="form-control form-control-sm" />
                         </div>
+                        @if(IsCsharp)
+                        {
+                            <div class="form-group">
+                                <label for="@nameof(literal.Function)-@literal.UIIdentifier" class="small">
+                                    @nameof(literal.Function)
+                                </label>
+                                <input id="@nameof(literal.Function)-@literal.UIIdentifier" value="@literal.Function"
+                                    @oninput="@(e => SetLiteralFunction(literal, (string)e.Value))"
+                                    list="@nameof(Constants.Functions)" class="form-control form-control-sm" />
+                            </div>
+
+                            <datalist id="@nameof(Constants.Functions)">
+                                @foreach (var function in Constants.Functions)
+                                {
+                                    <option value="@function" />
+                                }
+                            </datalist>
+                        }
                     </div>
                 }
                 
