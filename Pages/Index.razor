@@ -60,6 +60,35 @@
                         class="form-control" />
                 </div>
             </div>
+            <div>
+                <div class="d-flex justify-content-between">
+                    <h2 class="h5">@nameof(Imports)</h2>
+                    <button type="button" @onclick="AddImport" title="Add Import"
+                        class="btn btn-link btn-sm text-decoration-none text-primary p-0">
+                        ➕
+                    </button>
+                </div>
+                <div> 
+                    @foreach (var import in Imports)
+                    {
+                        <div class="form-group">
+                            <label for="@nameof(import.Namespace)-@import.UIIdentifier" class="small">
+                                @nameof(import.Namespace)
+                            </label>
+                            <input id="@nameof(import.Namespace)-@import.UIIdentifier" class="form-control"
+                                @oninput="@(e => SetImport(import, (string)e.Value))"
+                                @onblur="@(_ => RemoveImportIfEmpty(import))" />
+                        </div>
+                    }
+
+                    @if (Imports.Count == 0)
+                    {
+                        <p>
+                            Click <i>plus</i> button to add <i>@nameof(Import)</i>.
+                        </p>
+                    }
+                </div>
+            </div>
             <div class="form-check form-check-inline d-flex justify-content-end mr-0">
                 <label class="form-check-label mr-2" for="@nameof(SyncEnabled)">
                     @nameof(SyncEnabled).ToSeparateWords()
@@ -77,8 +106,8 @@
         <div>
             <div class="d-flex justify-content-between">
                 <h2 class="h5">@nameof(Declarations)</h2>
-                <button type="button" @onclick="AddDeclaration" title="Add"
-                    class="btn btn-link btn-sm text-decoration-none text-primary">
+                <button type="button" @onclick="AddDeclaration" title="Add Declaration"
+                    class="btn btn-link btn-sm text-decoration-none text-primary p-0">
                     ➕
                 </button>
             </div>
@@ -101,7 +130,7 @@
                                     ↓
                                 </button>
                             }
-                            <button @onclick="@(() => RemoveDeclaration(declaration))" type="button" title="Remove"
+                            <button @onclick="@(() => RemoveDeclaration(declaration))" type="button" title="Remove Declaration"
                                 class="btn btn-link btn-sm text-decoration-none text-danger">
                                 🗙
                             </button>

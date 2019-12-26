@@ -58,6 +58,7 @@ namespace VisualStudioSnippetGenerator.Pages
         }
 
         public List<Declaration> Declarations { get; set; } = new List<Declaration>();
+        public List<Import> Imports { get; set; } = new List<Import>();
 
         public string Title
         {
@@ -132,8 +133,6 @@ namespace VisualStudioSnippetGenerator.Pages
         public void SetDeclarationEditable(Declaration declaration, bool newValue)
             => WithSync(() => declaration.Editable = newValue);
 
-        public void RemoveDeclaration(Declaration declaration)
-            => WithSync(() => Declarations.Remove(declaration));
 
         public void MoveDeclarationUp(int index)
             => WithSync(() => Declarations.Reverse(index - 1, 2));
@@ -143,6 +142,26 @@ namespace VisualStudioSnippetGenerator.Pages
 
         public void AddDeclaration()
             => WithSync(() => Declarations.Add(new Declaration()));
+
+        public void SetImport(Import import, string newValue)
+            => WithSync(() => import.Namespace = newValue);
+
+        public void RemoveImportIfEmpty(Import import)
+            => WithSync(() =>
+            {
+                if (!string.IsNullOrWhiteSpace(import.Namespace))
+                {
+                    return;
+                }
+
+                Imports.Remove(import);
+            });
+
+        public void AddImport()
+            => WithSync(() => Imports.Add(new Import()));
+
+        public void RemoveDeclaration(Declaration declaration)
+            => WithSync(() => Declarations.Remove(declaration));
 
         public void CopyToClipboard()
             => JSRuntime.InvokeVoidAsync("copyToClipboard", SnippetTextTextarea);
@@ -186,7 +205,7 @@ namespace VisualStudioSnippetGenerator.Pages
 
                 SnippetText = SnippetSerializer.Serialize(
                     new VisualStudioSnippet(Title, Shortcut, Language, IsExpansion, IsSurroundsWith,
-                        Declarations, Code, Description, Author));
+                        Imports, Declarations, Code, Description, Author));
             }
             catch (Exception exception)
             {

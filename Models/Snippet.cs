@@ -12,12 +12,12 @@ namespace VisualStudioSnippetGenerator.Models
         public VisualStudioSnippet() { }
 
         public VisualStudioSnippet(string title, string? shortcut, string language, bool isExpansion, bool isSurroundsWith,
-            List<Declaration> literals, string code, string? description, string? author)
+            List<Import> imports, List<Declaration> literals, string code, string? description, string? author)
         {
             CodeSnippet = new CodeSnippet(
                 new Header(title, shortcut, isExpansion, isSurroundsWith, description, author),
                 new Snippet(
-                    new Code(language, code), literals));
+                    new Code(language, code), imports, literals));
         }
 
         public CodeSnippet? CodeSnippet { get; set; }
@@ -111,11 +111,16 @@ namespace VisualStudioSnippetGenerator.Models
 
         public Snippet() { }
 
-        public Snippet(Code code, List<Declaration> literals)
+        public Snippet(Code code, List<Import> imports, List<Declaration> literals)
         {
             Code = code;
             Declarations = literals;
+            Imports = imports;
         }
+
+        public bool ImportsSpecified => Imports.Count > 0;
+
+        public List<Import> Imports { get; set; } = new List<Import>();
 
         public bool DeclarationsSpecified => _declarations.Count > 0;
 
@@ -133,6 +138,21 @@ namespace VisualStudioSnippetGenerator.Models
         }
 
         public Code? Code { get; set; }
+    }
+
+    public class Import
+    {
+        [XmlIgnore]
+        public string UIIdentifier { get; } = Guid.NewGuid().ToString();
+
+        public Import() { }
+
+        public Import(string @namespace)
+        {
+            Namespace = @namespace;
+        }
+
+        public string? Namespace { get; set; }
     }
 
     public class Declaration
