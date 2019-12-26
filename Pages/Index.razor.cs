@@ -10,7 +10,7 @@ namespace VisualStudioSnippetGenerator.Pages
 {
     public partial class Index
     {
-        private string _body = string.Empty;
+        private string _code = string.Empty;
         private string? _description;
         private string? _author;
         private string _language = string.Empty;
@@ -42,12 +42,12 @@ namespace VisualStudioSnippetGenerator.Pages
 
         public bool SyncEnabled { get; set; } = true;
 
-        public string Body
+        public string Code
         {
-            get => _body;
+            get => _code;
             set
             {
-                _body = value;
+                _code = value;
 
                 var replacements = ReplacementService.MatchReplacements(value);
 
@@ -175,7 +175,7 @@ namespace VisualStudioSnippetGenerator.Pages
                 return;
             }
 
-            _body = ReplacementService.UpdateReplacements(Body, oldIdentifier, newIdentifier);
+            _code = ReplacementService.UpdateReplacements(Code, oldIdentifier, newIdentifier);
         }
 
         public override void Sync()
@@ -186,7 +186,7 @@ namespace VisualStudioSnippetGenerator.Pages
 
                 SnippetText = SnippetSerializer.Serialize(
                     new VisualStudioSnippet(Title, Shortcut, Language, IsExpansion, IsSurroundsWith,
-                        Declarations, Body, Description, Author));
+                        Declarations, Code, Description, Author));
             }
             catch (Exception exception)
             {

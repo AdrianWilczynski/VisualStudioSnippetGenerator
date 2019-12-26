@@ -19,12 +19,12 @@ namespace VisualStudioSnippetGenerator.Services
         public bool IsIdentifier(string identifier)
             => Regex.IsMatch(identifier, $"^{IdentifierRegex}$");
 
-        public string UpdateReplacements(string body, string oldIdentifier, string newIdentifier)
-            => Regex.Replace(body, ReplacementRegex(Regex.Escape(oldIdentifier)), ToReplacement(newIdentifier));
+        public string UpdateReplacements(string code, string oldIdentifier, string newIdentifier)
+            => Regex.Replace(code, ReplacementRegex(Regex.Escape(oldIdentifier)), ToReplacement(newIdentifier));
 
-        public IEnumerable<string> MatchReplacements(string body)
+        public IEnumerable<string> MatchReplacements(string code)
             => Regex
-                .Matches(body, ReplacementRegex(IdentifierRegex))
+                .Matches(code, ReplacementRegex(IdentifierRegex))
                 .Select(m => m.Groups[1].Value);
 
         public IEnumerable<Declaration> MapReplacementsToDeclarations(IEnumerable<string> replacements, IEnumerable<Declaration> declarations)

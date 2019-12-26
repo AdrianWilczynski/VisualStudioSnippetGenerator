@@ -12,12 +12,12 @@ namespace VisualStudioSnippetGenerator.Models
         public VisualStudioSnippet() { }
 
         public VisualStudioSnippet(string title, string? shortcut, string language, bool isExpansion, bool isSurroundsWith,
-            List<Declaration> literals, string body, string? description, string? author)
+            List<Declaration> literals, string code, string? description, string? author)
         {
             CodeSnippet = new CodeSnippet(
                 new Header(title, shortcut, isExpansion, isSurroundsWith, description, author),
                 new Snippet(
-                    new Code(language, body), literals));
+                    new Code(language, code), literals));
         }
 
         public CodeSnippet? CodeSnippet { get; set; }
@@ -96,9 +96,9 @@ namespace VisualStudioSnippetGenerator.Models
     {
         public SnippetType() { }
 
-        public SnippetType(string? body)
+        public SnippetType(string? code)
         {
-            Body = body;
+            Body = code;
         }
 
         [XmlText]
