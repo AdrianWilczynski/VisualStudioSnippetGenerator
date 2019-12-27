@@ -52,8 +52,8 @@ namespace VisualStudioSnippetGenerator.Pages
 
                 var replacements = ReplacementService.MatchReplacements(value);
 
-                SyncBodyWithDeclarations(replacements);
-                SyncBodyWithSnippetType(replacements);
+                SyncCodeWithDeclarations(replacements);
+                SyncCodeWithSnippetType(replacements);
                 Sync();
             }
         }
@@ -111,7 +111,7 @@ namespace VisualStudioSnippetGenerator.Pages
         {
             if (ReplacementService.IsIdentifier(newIdentifier))
             {
-                SyncDeclarationIdentifierWithBody(declaration.Identifier, newIdentifier);
+                SyncDeclarationIdentifierWithCode(declaration.Identifier, newIdentifier);
             }
 
             declaration.Identifier = newIdentifier;
@@ -166,7 +166,7 @@ namespace VisualStudioSnippetGenerator.Pages
         public async Task CopyToClipboardAsync()
             => await JSRuntime.InvokeVoidAsync("copyToClipboard", SnippetTextTextarea);
 
-        public void SyncBodyWithDeclarations(IEnumerable<string> replacements)
+        public void SyncCodeWithDeclarations(IEnumerable<string> replacements)
         {
             if (!SyncEnabled)
             {
@@ -177,7 +177,7 @@ namespace VisualStudioSnippetGenerator.Pages
                 .ToList();
         }
 
-        public void SyncBodyWithSnippetType(IEnumerable<string> replacements)
+        public void SyncCodeWithSnippetType(IEnumerable<string> replacements)
         {
             if (!SyncEnabled)
             {
@@ -187,7 +187,7 @@ namespace VisualStudioSnippetGenerator.Pages
             IsSurroundsWith = replacements.Contains(Constants.ReservedKeywords.Selected);
         }
 
-        public void SyncDeclarationIdentifierWithBody(string oldIdentifier, string newIdentifier)
+        public void SyncDeclarationIdentifierWithCode(string oldIdentifier, string newIdentifier)
         {
             if (!SyncEnabled)
             {
