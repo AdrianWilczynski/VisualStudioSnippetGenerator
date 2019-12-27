@@ -1,9 +1,15 @@
 // @ts-check
 
 /**
- * @param {HTMLTextAreaElement | HTMLInputElement} input
+ * @param {string} id
  */
-function copyToClipboard(input) {
+function copyToClipboard(id) {
+    const input = document.getElementById(id);
+
+    if (!(input instanceof HTMLTextAreaElement || input instanceof HTMLInputElement)) {
+        throw new Error('Expected HTMLTextAreaElement or HTMLInputElement.');
+    }
+
     input.select();
     document.execCommand('copy');
 }
