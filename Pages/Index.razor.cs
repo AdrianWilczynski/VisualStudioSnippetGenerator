@@ -56,13 +56,11 @@ namespace VisualStudioSnippetGenerator.Pages
                 var replacements = ReplacementService.MatchReplacements(code.Body);
                 MapCodeToDeclarations(replacements);
                 Snippet.CodeSnippet.Header.IsSurroundsWith = replacements.Contains(Constants.ReservedKeywords.Selected);
-                return;
             }
             else if (e.Sender is Declaration && e.PropertyName == nameof(Declaration.Identifier) && SyncEnabled)
             {
                 Snippet.CodeSnippet.Snippet.Code.Body = ReplacementService.UpdateReplacements(
                     Snippet.CodeSnippet.Snippet.Code.Body, (string)e.PreviousValue!, (string)e.CurrentValue!);
-                return;
             }
 
             TrySerializeSnippet();
