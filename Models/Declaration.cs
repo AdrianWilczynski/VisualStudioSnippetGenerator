@@ -69,9 +69,11 @@ namespace VisualStudioSnippetGenerator.Models
             }
         }
 
+        public bool ToolTipSpecified => !string.IsNullOrWhiteSpace(_toolTip);
+
         public string? ToolTip
         {
-            get => !string.IsNullOrWhiteSpace(_toolTip) ? _toolTip : null;
+            get => _toolTip;
             set
             {
                 _toolTip = value;
@@ -79,9 +81,11 @@ namespace VisualStudioSnippetGenerator.Models
             }
         }
 
+        public bool FunctionSpecified => !string.IsNullOrWhiteSpace(_function);
+
         public string? Function
         {
-            get => !string.IsNullOrWhiteSpace(_function) ? _function : null;
+            get => _function;
             set
             {
                 _function = value;
@@ -89,9 +93,11 @@ namespace VisualStudioSnippetGenerator.Models
             }
         }
 
+        public bool TypeSpecified => !string.IsNullOrWhiteSpace(_type);
+
         public string? Type
         {
-            get => !string.IsNullOrWhiteSpace(_type) ? _type : null;
+            get => _type;
             set
             {
                 _type = value;

@@ -4,10 +4,6 @@ namespace VisualStudioSnippetGenerator.Models
 {
     public class Header
     {
-        private string? _description;
-        private string? _author;
-        private string? _shortcut;
-
         public Header() { }
 
         public Header(string title, string? shortcut, bool isExpansion, bool isSurroundsWith, string? description, string? author)
@@ -29,24 +25,17 @@ namespace VisualStudioSnippetGenerator.Models
 
         public string? Title { get; set; }
 
-        public string? Shortcut
-        {
-            get => string.IsNullOrWhiteSpace(_shortcut) ? null : _shortcut;
-            set => _shortcut = value;
-        }
+        public bool ShortcutSpecified => !string.IsNullOrWhiteSpace(Shortcut);
 
-        public string? Description
-        {
-            get => string.IsNullOrWhiteSpace(_description) ? null : _description;
-            set => _description = value;
-        }
+        public string? Shortcut { get; set; }
 
-        public string? Author
+        public bool DescriptionSpecified => !string.IsNullOrWhiteSpace(Description);
 
-        {
-            get => string.IsNullOrWhiteSpace(_author) ? null : _author;
-            set => _author = value;
-        }
+        public string? Description { get; set; }
+
+        public bool AuthorSpecified => !string.IsNullOrWhiteSpace(Author);
+
+        public string? Author { get; set; }
 
         public bool SnippetTypesSpecified => SnippetTypes.Count > 0;
 

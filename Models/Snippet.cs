@@ -28,11 +28,9 @@ namespace VisualStudioSnippetGenerator.Models
         [XmlArrayItem(nameof(Object), typeof(Object))]
         public List<Declaration> Declarations
         {
-            get => _declarations.Select(d => d.Type switch
-            {
-                null => new Literal(d),
-                _ => (Declaration)new Object(d)
-            }).ToList();
+            get => _declarations
+                .Select(d => d.TypeSpecified ? new Object(d) : (Declaration)new Literal(d))
+                .ToList();
             set => _declarations = value;
         }
 
