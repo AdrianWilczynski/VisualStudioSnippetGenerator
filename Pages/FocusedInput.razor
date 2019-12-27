@@ -13,10 +13,9 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (!firstRender || !Focus) {
-            return;
+        if (firstRender && Focus) 
+        {
+             await JSRuntime.InvokeVoidAsync("focus", InputElement);
         }
-
-        await JSRuntime.InvokeVoidAsync("focus", InputElement);
     }
 }
