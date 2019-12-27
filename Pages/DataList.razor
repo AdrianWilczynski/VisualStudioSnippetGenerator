@@ -1,0 +1,14 @@
+<datalist id="@Id">
+    @foreach (var option in Options)
+    {
+        <option value="@option" />
+    }
+</datalist>
+
+@code {
+    [Parameter]
+    public string? Id { get; set; }
+
+    [Parameter]
+    public IEnumerable<string> Options { get; set; } = Enumerable.Empty<string>();
+}

@@ -1,9 +1,7 @@
 using VisualStudioSnippetGenerator.Services;
 using VisualStudioSnippetGenerator.Models;
 using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 using System;
-using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using VisualStudioSnippetGenerator.Utilities;
@@ -42,12 +40,7 @@ namespace VisualStudioSnippetGenerator.Pages
 
         [Inject]
         public ReplacementService ReplacementService { get; set; }
-
-        [Inject]
-        public IJSRuntime JSRuntime { get; set; }
 #nullable enable
-
-        private ElementReference SnippetTextTextarea { get; set; }
 
         public string? Error { get; set; }
 
@@ -148,8 +141,5 @@ namespace VisualStudioSnippetGenerator.Pages
 
         public void MoveDeclarationDown(int index)
             => Snippet.CodeSnippet.Snippet.Declarations.Move(index, index + 1);
-
-        public async Task CopyToClipboardAsync()
-            => await JSRuntime.InvokeVoidAsync("copyToClipboard", SnippetTextTextarea);
     }
 }

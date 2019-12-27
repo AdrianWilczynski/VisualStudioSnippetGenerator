@@ -2,12 +2,7 @@
 
 <form class="row">
         <div class="col-12 col-md-6">
-            @if (Error != null)
-            {
-                <div class="alert alert-danger">
-                    @Error
-                </div>
-            }
+            <Alert Error="@Error" />
             
             <div class="row">
                 <div class="form-group col-12 col-lg-6">
@@ -30,12 +25,7 @@
                         @bind-value="Snippet.CodeSnippet.Snippet.Code.Language" @bind-value:event="oninput"
                         list="@nameof(Constants.Languages)" class="form-control border border-primary" />
 
-                    <datalist id="@nameof(Constants.Languages)">
-                        @foreach (var language in Constants.Languages.All)
-                        {
-                            <option value="@language" />
-                        }
-                    </datalist>
+                    <DataList Id="@nameof(Constants.Languages)" Options="Constants.Languages.All" />
                 </div>
                 <div class="col-12 col-lg-6 mb-3 mb-lg-0">
                     <h2 class="h5">@nameof(Constants.SnippetTypes).ToSeparateWords()</h2>
@@ -195,12 +185,7 @@
                                     list="@nameof(Constants.Functions)" class="form-control form-control-sm" />
                             </div>
 
-                            <datalist id="@nameof(Constants.Functions)">
-                                @foreach (var function in Constants.Functions)
-                                {
-                                    <option value="@function" />
-                                }
-                            </datalist>
+                            <DataList Id="@nameof(Constants.Functions)" Options="Constants.Functions" />
                         }
                     </div>
                 }
@@ -215,13 +200,11 @@
         </div>
         <div class="form-group">
             <label for="@nameof(SnippetText)" class="h5">@nameof(SnippetText).ToSeparateWords()</label>
-            <textarea id="@nameof(SnippetText)" @bind="SnippetText" @ref="SnippetTextTextarea"
-                class="form-control border border-primary" rows=30></textarea>
+            <textarea id="@nameof(SnippetText)" @bind="SnippetText" class="form-control border border-primary"
+                rows=30></textarea>
         </div>
         <div class="d-flex justify-content-end">
-            <button type="button" @onclick="CopyToClipboardAsync" class="btn btn-primary">
-                <i class="fas fa-copy"></i> Copy to Clipboard!
-            </button>
+            <CopyToClipboard TargetId="@nameof(SnippetText)" />
         </div>
     </div>
 </form>

@@ -1,0 +1,11 @@
+@if (Error != null)
+{
+    <div class="alert alert-danger">
+        @Error
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string? Error { get; set; }
+}
