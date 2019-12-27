@@ -85,7 +85,7 @@
                                 @nameof(import.Namespace)
                             </label>
                             <FocusedInput id="@import.UIIdentifier" class="form-control" @bind-Value="import.Namespace"
-                                @onblur="@(_ => RemoveImportIfEmpty(import))" />
+                                @bind-Value:event="ValueInput" @onblur="@(_ => RemoveImportIfEmpty(import))" />
                         </div>
                     }
 

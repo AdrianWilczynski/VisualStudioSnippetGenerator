@@ -1,6 +1,7 @@
 @inject IJSRuntime JSRuntime
 
-<input type="text" @ref="InputElement" @attributes="Attributes" @oninput="OnValueChanged" value="@Value" />
+<input type="text" @ref="InputElement" @attributes="Attributes" @oninput="OnValueInput" @onchange="OnValueChanged"
+    value="@Value" />
 
 @code {
     private ElementReference InputElement { get; set; }
@@ -10,6 +11,9 @@
 
     [Parameter]
     public EventCallback<string> ValueChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<string> ValueInput { get; set; }
 
     [Parameter]
     public bool Focus { get; set; } = true;
@@ -25,9 +29,12 @@
         }
     }
 
-    private Task OnValueChanged(ChangeEventArgs e)
+    private Task OnValueInput(ChangeEventArgs e)
     {
         Value = e.Value.ToString();
-        return ValueChanged.InvokeAsync(Value);
+        return ValueInput.InvokeAsync(Value);
     }
+
+    private Task OnValueChanged(ChangeEventArgs e)
+        => ValueChanged.InvokeAsync(e.Value.ToString());
 }
