@@ -1,5 +1,4 @@
-﻿@inherits SyncableComponentBase
-@page "/"
+﻿@page "/"
 
 <form class="row">
         <div class="col-12 col-md-6">
@@ -12,18 +11,23 @@
             
             <div class="row">
                 <div class="form-group col-12 col-lg-6">
-                    <label for="@nameof(Title)" class="h5">@nameof(Title)</label>
-                    <input id="@nameof(Title)" @bind-value="Title" @bind-value:event="oninput"
+                    <label for="@nameof(Snippet.CodeSnippet.Header.Title)"
+                        class="h5">@nameof(Snippet.CodeSnippet.Header.Title)</label>
+                    <input id="@nameof(Snippet.CodeSnippet.Header.Title)" @bind-value="Snippet.CodeSnippet.Header.Title"
+                        @bind-value:event="oninput" class="form-control border border-primary" />
+                </div>
+                <div class="form-group col-12 col-lg-6">
+                    <label for="@nameof(Snippet.CodeSnippet.Header.Shortcut)"
+                        class="h5">@nameof(Snippet.CodeSnippet.Header.Shortcut)</label>
+                    <input id="@nameof(Snippet.CodeSnippet.Header.Shortcut)"
+                        @bind-value="Snippet.CodeSnippet.Header.Shortcut" @bind-value:event="oninput"
                         class="form-control border border-primary" />
                 </div>
                 <div class="form-group col-12 col-lg-6">
-                    <label for="@nameof(Shortcut)" class="h5">@nameof(Shortcut)</label>
-                    <input id="@nameof(Shortcut)" @bind-value="Shortcut" @bind-value:event="oninput"
-                        class="form-control border border-primary" />
-                </div>
-                <div class="form-group col-12 col-lg-6">
-                    <label for="@nameof(Language)" class="h5">@nameof(Language)</label>
-                    <input id="@nameof(Language)" @bind-value="Language" @bind-value:event="oninput"
+                    <label for="@nameof(Snippet.CodeSnippet.Snippet.Code.Language)"
+                        class="h5">@nameof(Snippet.CodeSnippet.Snippet.Code.Language)</label>
+                    <input id="@nameof(Snippet.CodeSnippet.Snippet.Code.Language)"
+                        @bind-value="Snippet.CodeSnippet.Snippet.Code.Language" @bind-value:event="oninput"
                         list="@nameof(Constants.Languages)" class="form-control border border-primary" />
 
                     <datalist id="@nameof(Constants.Languages)">
@@ -36,52 +40,56 @@
                 <div class="col-12 col-lg-6 mb-3 mb-lg-0">
                     <h2 class="h5">@nameof(Constants.SnippetTypes).ToSeparateWords()</h2>
                     <div class="form-check">
-                        <input id="@nameof(IsExpansion)" @bind="IsExpansion" type="checkbox" class="form-check-input">
-                        <label class="form-check-label" for="@nameof(IsExpansion)">
+                        <input id="@nameof(Snippet.CodeSnippet.Header.IsExpansion)"
+                            @bind="Snippet.CodeSnippet.Header.IsExpansion" type="checkbox" class="form-check-input">
+                        <label class="form-check-label" for="@nameof(Snippet.CodeSnippet.Header.IsExpansion)">
                             @Constants.SnippetTypes.Expansion
                         </label>
                     </div>
                     <div class="form-check">
-                        <input id="@nameof(IsSurroundsWith)" @bind="IsSurroundsWith" type="checkbox"
-                            class="form-check-input">
-                        <label class="form-check-label" for="@nameof(IsSurroundsWith)">
+                        <input id="@nameof(Snippet.CodeSnippet.Header.IsSurroundsWith)"
+                            @bind="Snippet.CodeSnippet.Header.IsSurroundsWith" type="checkbox" class="form-check-input">
+                        <label class="form-check-label" for="@nameof(Snippet.CodeSnippet.Header.IsSurroundsWith)">
                             @Constants.SnippetTypes.SurroundsWith
                         </label>
                     </div>
                 </div>
                 <div class="form-group col-12 col-lg-6">
-                    <label for="@nameof(Description)" class="h5">@nameof(Description)</label>
-                    <input id="@nameof(Description)" @bind-value="Description" @bind-value:event="oninput"
+                    <label for="@nameof(Snippet.CodeSnippet.Header.Description)"
+                        class="h5">@nameof(Snippet.CodeSnippet.Header.Description)</label>
+                    <input id="@nameof(Snippet.CodeSnippet.Header.Description)"
+                        @bind-value="Snippet.CodeSnippet.Header.Description" @bind-value:event="oninput"
                         class="form-control" />
                 </div>
                 <div class="form-group col-12 col-lg-6">
-                    <label for="@nameof(Author)" class="h5">@nameof(Author)</label>
-                    <input id="@nameof(Author)" @bind-value="Author" @bind-value:event="oninput"
+                    <label for="@nameof(Snippet.CodeSnippet.Header.Author)"
+                        class="h5">@nameof(Snippet.CodeSnippet.Header.Author)</label>
+                    <input id="@nameof(Snippet.CodeSnippet.Header.Author)"
+                        @bind-value="Snippet.CodeSnippet.Header.Author" @bind-value:event="oninput"
                         class="form-control" />
                 </div>
             </div>
             <div>
                 <div class="d-flex justify-content-between">
-                    <h2 class="h5">@nameof(Imports)</h2>
+                    <h2 class="h5">@nameof(Snippet.CodeSnippet.Snippet.Imports)</h2>
                     <button type="button" @onclick="AddImport" title="Add Import"
                         class="btn btn-link btn-sm text-decoration-none text-primary p-0">
                         ➕
                     </button>
                 </div>
                 <div> 
-                    @foreach (var import in Imports)
+                    @foreach (var import in Snippet.CodeSnippet.Snippet.Imports)
                     {
                         <div class="form-group">
                             <label for="@import.UIIdentifier" class="small">
                                 @nameof(import.Namespace)
                             </label>
-                            <FocusedInput id="@import.UIIdentifier" class="form-control"
-                                @oninput="@(e => SetImport(import, (string)e.Value))"
+                            <FocusedInput id="@import.UIIdentifier" class="form-control" @bind-Value="import.Namespace"
                                 @onblur="@(_ => RemoveImportIfEmpty(import))" />
                         </div>
                     }
 
-                    @if (Imports.Count == 0)
+                    @if (Snippet.CodeSnippet.Snippet.Imports.Count == 0)
                     {
                         <p>
                             Click <i>plus</i> button to add <i>@nameof(Import)</i>.
@@ -93,26 +101,27 @@
                 <label class="form-check-label mr-2" for="@nameof(SyncEnabled)">
                     @nameof(SyncEnabled).ToSeparateWords()
                 </label>
-                <input type="checkbox" @bind="SyncEnabled" id="@nameof(SyncEnabled)"
-                    class="form-check-input mr-0">
+                <input type="checkbox" @bind="SyncEnabled" id="@nameof(SyncEnabled)" class="form-check-input mr-0">
             </div>
             <div class="form-group">
-                <label for="@nameof(Code)" class="h5">@nameof(Code)</label>
-                <textarea id="@nameof(Code)" rows="20" @bind-value="Code" @bind-value:event="oninput"
+                <label for="@nameof(Snippet.CodeSnippet.Snippet.Code)"
+                    class="h5">@nameof(Snippet.CodeSnippet.Snippet.Code)</label>
+                <textarea id="@nameof(Snippet.CodeSnippet.Snippet.Code)" rows="20"
+                    @bind-value="Snippet.CodeSnippet.Snippet.Code.Body" @bind-value:event="oninput"
                     class="form-control border border-primary"></textarea>
             </div>
     </div>
     <div class="col-12 col-md-6">
         <div>
             <div class="d-flex justify-content-between">
-                <h2 class="h5">@nameof(Declarations)</h2>
+                <h2 class="h5">@nameof(Snippet.CodeSnippet.Snippet.Declarations)</h2>
                 <button type="button" @onclick="AddDeclaration" title="Add Declaration"
                     class="btn btn-link btn-sm text-decoration-none text-primary p-0">
                     ➕
                 </button>
             </div>
             <div class="row">
-                @foreach (var (declaration, i) in Declarations.Select((d, i) => (d, i)))
+                @foreach (var (declaration, i) in Snippet.CodeSnippet.Snippet.Declarations.Select((d, i) => (d, i)))
                 {
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="d-flex justify-content-end">
@@ -123,56 +132,56 @@
                                     ↑
                                 </button>
                             }
-                            @if (i != Declarations.Count - 1)
+                            @if (i != Snippet.CodeSnippet.Snippet.Declarations.Count - 1)
                             {
                                 <button @onclick="@(() => MoveDeclarationDown(i))" type="button" title="Move down"
                                     class="btn btn-link btn-sm text-decoration-none text-primary">
                                     ↓
                                 </button>
                             }
-                            <button @onclick="@(() => RemoveDeclaration(declaration))" type="button" title="Remove Declaration"
-                                class="btn btn-link btn-sm text-decoration-none text-danger">
+                            <button @onclick="@(() => RemoveDeclaration(declaration))" type="button"
+                                title="Remove Declaration" class="btn btn-link btn-sm text-decoration-none text-danger">
                                 🗙
                             </button>
                         </div>
                         <div class="form-check form-check-inline d-flex justify-content-end mr-2">
-                            <label class="form-check-label small mr-2" for="@nameof(@declaration.Editable)-@declaration.UIIdentifier">
+                            <label class="form-check-label small mr-2"
+                                for="@nameof(@declaration.Editable)-@declaration.UIIdentifier">
                                 @nameof(declaration.Editable)
                             </label>
-                            <input id="@nameof(@declaration.Editable)-@declaration.UIIdentifier" type="checkbox" 
-                                checked="@declaration.Editable" @onchange="@(e => SetDeclarationEditable(declaration, (bool)e.Value))"
-                                class="form-check-input mr-0" />
+                            <input id="@nameof(@declaration.Editable)-@declaration.UIIdentifier" type="checkbox"
+                                @bind="declaration.Editable" class="form-check-input mr-0" />
                         </div>
                         <div class="form-group">
                             <label for="@nameof(@declaration.Identifier)-@declaration.UIIdentifier" class="small">
                                 @nameof(declaration.Identifier)
                             </label>
-                            <FocusedInput id="@(nameof(declaration.Identifier) + '-' + declaration.UIIdentifier)" value="@declaration.Identifier" Focus="declaration.Focus"
-                                @onchange="@(e => SetDeclarationIdentifier(declaration, (string)e.Value))"
+                            <FocusedInput id="@(nameof(declaration.Identifier) + '-' + declaration.UIIdentifier)"
+                                Focus="declaration.Focus" @bind-Value="declaration.Identifier"
                                 class="form-control form-control-sm border border-primary" />
                         </div>
                         <div class="form-group">
                             <label for="@nameof(@declaration.DefaultValue)-@declaration.UIIdentifier" class="small">
                                 @nameof(declaration.DefaultValue).ToSeparateWords()
                             </label>
-                            <input id="@nameof(@declaration.DefaultValue)-@declaration.UIIdentifier" value="@declaration.DefaultValue"
-                                @oninput="@(e => SetDefaultDeclarationValue(declaration, (string)e.Value))"
+                            <input id="@nameof(@declaration.DefaultValue)-@declaration.UIIdentifier"
+                                @bind-value="declaration.DefaultValue" @bind-value:event="oninput"
                                 class="form-control form-control-sm border border-primary" />
                         </div>
                         <div class="form-group">
                             <label for="@nameof(@declaration.ToolTip)-@declaration.UIIdentifier" class="small">
                                 @nameof(declaration.ToolTip)
                             </label>
-                            <input id="@nameof(@declaration.ToolTip)-@declaration.UIIdentifier" value="@declaration.ToolTip"
-                                @oninput="@(e => SetDeclarationToolTip(declaration, (string)e.Value))"
+                            <input id="@nameof(@declaration.ToolTip)-@declaration.UIIdentifier"
+                                @bind-value="declaration.ToolTip" @bind-value:event="oninput"
                                 class="form-control form-control-sm" />
                         </div>
                         <div class="form-group">
                             <label for="@nameof(@declaration.Type)-@declaration.UIIdentifier" class="small">
                                 @nameof(declaration.Type)
                             </label>
-                            <input id="@nameof(@declaration.Type)-@declaration.UIIdentifier" value="@declaration.Type"
-                                @oninput="@(e => SetDeclarationType(declaration, (string)e.Value))"
+                            <input id="@nameof(@declaration.Type)-@declaration.UIIdentifier"
+                                @bind-value="declaration.Type" @bind-value:event="oninput"
                                 class="form-control form-control-sm" />
                         </div>
                         @if(IsCSharp)
@@ -181,8 +190,8 @@
                                 <label for="@nameof(@declaration.Function)-@declaration.UIIdentifier" class="small">
                                     @nameof(declaration.Function)
                                 </label>
-                                <input id="@nameof(@declaration.Function)-@declaration.UIIdentifier" value="@declaration.Function"
-                                    @oninput="@(e => SetDeclarationFunction(declaration, (string)e.Value))"
+                                <input id="@nameof(@declaration.Function)-@declaration.UIIdentifier"
+                                    @bind-value="declaration.Function" @bind-value:event="oninput"
                                     list="@nameof(Constants.Functions)" class="form-control form-control-sm" />
                             </div>
 
@@ -196,7 +205,7 @@
                     </div>
                 }
                 
-                @if(Declarations.Count == 0)
+                @if(Snippet.CodeSnippet.Snippet.Declarations.Count == 0)
                 {
                     <p class="pl-3">
                         Input <i>$@nameof(Declaration.Identifier)$</i> into <i>@nameof(Code)</i> or click <i>plus</i> button to add <i>@nameof(Declaration)</i>.

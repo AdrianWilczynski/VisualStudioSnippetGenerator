@@ -1,24 +1,30 @@
-using System.Collections.Generic;
-using System.Linq;
 using VisualStudioSnippetGenerator.Services;
 using VisualStudioSnippetGenerator.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
+using VisualStudioSnippetGenerator.Utilities;
 
 namespace VisualStudioSnippetGenerator.Pages
 {
     public partial class Index
     {
-        private string _code = string.Empty;
-        private string? _description;
-        private string? _author;
-        private string _language = string.Empty;
-        private string? _shortcut;
-        private string _title = string.Empty;
-        private bool _isExpansion = true;
-        private bool _isSurroundsWith;
+        public Index()
+        {
+            Snippet = new VisualStudioSnippet();
+
+            Snippet.CodeSnippet.Header.OnChanged += OnSnippetChanged;
+            Snippet.CodeSnippet.Snippet.Declarations.OnChanged += OnSnippetChanged;
+            Snippet.CodeSnippet.Snippet.Imports.OnChanged += OnSnippetChanged;
+            Snippet.CodeSnippet.Snippet.Code.OnChanged += OnSnippetChanged;
+        }
+
+        public VisualStudioSnippet Snippet { get; set; }
+
+        public string SnippetText { get; set; } = string.Empty;
 
 #nullable disable
         private SnippetSerializer _snippetSerializer;
@@ -27,7 +33,11 @@ namespace VisualStudioSnippetGenerator.Pages
         public SnippetSerializer SnippetSerializer
         {
             get => _snippetSerializer;
-            set => SetThenSync(value, ref _snippetSerializer);
+            set
+            {
+                _snippetSerializer = value;
+                TrySerializeSnippet();
+            }
         }
 
         [Inject]
@@ -43,167 +53,103 @@ namespace VisualStudioSnippetGenerator.Pages
 
         public bool SyncEnabled { get; set; } = true;
 
-        public string Code
+        public bool IsCSharp => Snippet.CodeSnippet.Snippet.Code.Language
+            .Equals(Constants.Languages.CSharp, StringComparison.OrdinalIgnoreCase);
+
+        public void OnSnippetChanged(ObservableObjectChangedArgs e)
         {
-            get => _code;
-            set
+            if (e.Sender is Code code && e.PropertyName == nameof(Code.Body) && SyncEnabled)
             {
-                _code = value;
-
-                var replacements = ReplacementService.MatchReplacements(value);
-
-                SyncCodeWithDeclarations(replacements);
-                SyncCodeWithSnippetType(replacements);
-                Sync();
+                var replacements = ReplacementService.MatchReplacements(code.Body);
+                MapCodeToDeclarations(replacements);
+                Snippet.CodeSnippet.Header.IsSurroundsWith = replacements.Contains(Constants.ReservedKeywords.Selected);
+                return;
             }
-        }
-
-        public List<Declaration> Declarations { get; set; } = new List<Declaration>();
-        public List<Import> Imports { get; set; } = new List<Import>();
-
-        public string Title
-        {
-            get => _title;
-            set => SetThenSync(value, ref _title);
-        }
-
-        public string? Shortcut
-        {
-            get => _shortcut;
-            set => SetThenSync(value, ref _shortcut);
-        }
-
-        public string Language
-        {
-            get => _language;
-            set => SetThenSync(value, ref _language);
-        }
-
-        public string? Description
-        {
-            get => _description;
-            set => SetThenSync(value, ref _description);
-        }
-
-        public string? Author
-        {
-            get => _author;
-            set => SetThenSync(value, ref _author);
-        }
-
-        public bool IsExpansion
-        {
-            get => _isExpansion;
-            set => SetThenSync(value, ref _isExpansion);
-        }
-
-        public bool IsSurroundsWith
-        {
-            get => _isSurroundsWith;
-            set => SetThenSync(value, ref _isSurroundsWith);
-        }
-
-        public bool IsCSharp => Language.Equals(Constants.Languages.CSharp, StringComparison.OrdinalIgnoreCase);
-
-        public string SnippetText { get; set; } = string.Empty;
-
-        public void SetDeclarationIdentifier(Declaration declaration, string newIdentifier)
-        {
-            if (ReplacementService.IsIdentifier(newIdentifier))
+            else if (e.Sender is Declaration && e.PropertyName == nameof(Declaration.Identifier) && SyncEnabled)
             {
-                SyncDeclarationIdentifierWithCode(declaration.Identifier, newIdentifier);
+                Snippet.CodeSnippet.Snippet.Code.Body = ReplacementService.UpdateReplacements(
+                    Snippet.CodeSnippet.Snippet.Code.Body, (string)e.PreviousValue!, (string)e.CurrentValue!);
+                return;
             }
 
-            declaration.Identifier = newIdentifier;
-
-            Sync();
+            TrySerializeSnippet();
+            StateHasChanged();
         }
 
-        public void SetDefaultDeclarationValue(Declaration declaration, string newValue)
-            => WithSync(() => declaration.DefaultValue = newValue);
-
-        public void SetDeclarationToolTip(Declaration declaration, string newValue)
-            => WithSync(() => declaration.ToolTip = newValue);
-
-        public void SetDeclarationType(Declaration declaration, string newValue)
-            => WithSync(() => declaration.Type = newValue);
-
-        public void SetDeclarationFunction(Declaration declaration, string newValue)
-            => WithSync(() => declaration.Function = newValue);
-
-        public void SetDeclarationEditable(Declaration declaration, bool newValue)
-            => WithSync(() => declaration.Editable = newValue);
-
-        public void MoveDeclarationUp(int index)
-            => WithSync(() => Declarations.Reverse(index - 1, 2));
-
-        public void MoveDeclarationDown(int index)
-            => WithSync(() => Declarations.Reverse(index, 2));
-
-        public void AddDeclaration()
-            => WithSync(() => Declarations.Add(new Declaration(touched: true, focus: true)));
-
-        public void SetImport(Import import, string newValue)
-            => WithSync(() => import.Namespace = newValue);
-
-        public void RemoveImportIfEmpty(Import import)
-            => WithSync(() =>
-            {
-                if (string.IsNullOrWhiteSpace(import.Namespace))
-                {
-                    Imports.Remove(import);
-                }
-            });
-
-        public void AddImport()
-            => WithSync(() => Imports.Add(new Import()));
-
-        public void RemoveDeclaration(Declaration declaration)
-            => WithSync(() => Declarations.Remove(declaration));
-
-        public async Task CopyToClipboardAsync()
-            => await JSRuntime.InvokeVoidAsync("copyToClipboard", SnippetTextTextarea);
-
-        public void SyncCodeWithDeclarations(IEnumerable<string> replacements)
-        {
-            if (SyncEnabled)
-            {
-                Declarations = ReplacementService
-                    .MapReplacementsToDeclarations(replacements, Declarations)
-                    .ToList();
-            }
-        }
-
-        public void SyncCodeWithSnippetType(IEnumerable<string> replacements)
-        {
-            if (SyncEnabled)
-            {
-                IsSurroundsWith = replacements.Contains(Constants.ReservedKeywords.Selected);
-            }
-        }
-
-        public void SyncDeclarationIdentifierWithCode(string oldIdentifier, string newIdentifier)
-        {
-            if (SyncEnabled)
-            {
-                _code = ReplacementService.UpdateReplacements(Code, oldIdentifier, newIdentifier);
-            }
-        }
-
-        public override void Sync()
+        public void TrySerializeSnippet()
         {
             try
             {
                 Error = null;
-
-                SnippetText = SnippetSerializer.Serialize(
-                    new VisualStudioSnippet(Title, Shortcut, Language, IsExpansion, IsSurroundsWith,
-                        Imports, Declarations, Code, Description, Author));
+                SnippetText = SnippetSerializer.Serialize(Snippet);
             }
             catch (Exception exception)
             {
                 Error = exception.Message;
             }
         }
+
+        public void AddDeclaration()
+        {
+            var declaration = new Declaration(touched: true, focus: true);
+            declaration.OnChanged += OnSnippetChanged;
+            Snippet.CodeSnippet.Snippet.Declarations.Add(declaration);
+        }
+
+        public void MapCodeToDeclarations(IEnumerable<string> replacements)
+        {
+            var afterMaping = Snippet.CodeSnippet.Snippet.Declarations
+                .Where(d => replacements.Contains(d.Identifier) || d.Touched)
+                .Concat(replacements
+                    .Where(r => !Constants.ReservedKeywords.All.Contains(r)
+                        && !Snippet.CodeSnippet.Snippet.Declarations.Any(d => d.Identifier == r))
+                    .Select(r =>
+                    {
+                        var declaration = new Declaration(r);
+                        declaration.OnChanged += OnSnippetChanged;
+                        return declaration;
+                    }));
+
+            var removed = Snippet.CodeSnippet.Snippet.Declarations
+                .Except(afterMaping);
+
+            foreach (var toUnsubscribe in removed)
+            {
+                toUnsubscribe.OnChanged -= OnSnippetChanged;
+            }
+
+            Snippet.CodeSnippet.Snippet.Declarations.Replace(afterMaping);
+        }
+
+        public void RemoveDeclaration(Declaration declaration)
+        {
+            Snippet.CodeSnippet.Snippet.Declarations.Remove(declaration);
+            declaration.OnChanged -= OnSnippetChanged;
+        }
+
+        public void AddImport()
+        {
+            var import = new Import();
+            import.OnChanged += OnSnippetChanged;
+            Snippet.CodeSnippet.Snippet.Imports.Add(import);
+        }
+
+        public void RemoveImportIfEmpty(Import import)
+        {
+            if (string.IsNullOrWhiteSpace(import.Namespace))
+            {
+                Snippet.CodeSnippet.Snippet.Imports.Remove(import);
+                import.OnChanged -= OnSnippetChanged;
+            }
+        }
+
+        public void MoveDeclarationUp(int index)
+            => Snippet.CodeSnippet.Snippet.Declarations.Move(index, index - 1);
+
+        public void MoveDeclarationDown(int index)
+            => Snippet.CodeSnippet.Snippet.Declarations.Move(index, index + 1);
+
+        public async Task CopyToClipboardAsync()
+            => await JSRuntime.InvokeVoidAsync("copyToClipboard", SnippetTextTextarea);
     }
 }

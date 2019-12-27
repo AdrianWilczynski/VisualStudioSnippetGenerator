@@ -1,9 +1,11 @@
+using System;
 using System.Xml;
 using System.Xml.Serialization;
+using VisualStudioSnippetGenerator.Utilities;
 
 namespace VisualStudioSnippetGenerator.Models
 {
-    public class Declaration : UIIdentifiableBase
+    public class Declaration : ObservableObject
     {
         private string _identifier = string.Empty;
         private bool _editable = true;
@@ -34,15 +36,14 @@ namespace VisualStudioSnippetGenerator.Models
             _type = declaration.Type;
         }
 
+        [XmlIgnore]
+        public string UIIdentifier { get; } = Guid.NewGuid().ToString();
+
         [XmlElement("ID")]
         public string Identifier
         {
             get => _identifier;
-            set
-            {
-                _identifier = value;
-                Touched = true;
-            }
+            set => SetProperty(ref _identifier, value, onChanged: () => Touched = true);
         }
 
         public bool EditableSpecified => !Editable;
@@ -51,22 +52,14 @@ namespace VisualStudioSnippetGenerator.Models
         public bool Editable
         {
             get => _editable;
-            set
-            {
-                _editable = value;
-                Touched = true;
-            }
+            set => SetProperty(ref _editable, value, onChanged: () => Touched = true);
         }
 
         [XmlElement("Default")]
         public string DefaultValue
         {
             get => _defaultValue;
-            set
-            {
-                _defaultValue = value;
-                Touched = true;
-            }
+            set => SetProperty(ref _defaultValue, value, onChanged: () => Touched = true);
         }
 
         public bool ToolTipSpecified => !string.IsNullOrWhiteSpace(_toolTip);
@@ -74,11 +67,7 @@ namespace VisualStudioSnippetGenerator.Models
         public string? ToolTip
         {
             get => _toolTip;
-            set
-            {
-                _toolTip = value;
-                Touched = true;
-            }
+            set => SetProperty(ref _toolTip, value, onChanged: () => Touched = true);
         }
 
         public bool FunctionSpecified => !string.IsNullOrWhiteSpace(_function);
@@ -86,11 +75,7 @@ namespace VisualStudioSnippetGenerator.Models
         public string? Function
         {
             get => _function;
-            set
-            {
-                _function = value;
-                Touched = true;
-            }
+            set => SetProperty(ref _function, value, onChanged: () => Touched = true);
         }
 
         public bool TypeSpecified => !string.IsNullOrWhiteSpace(_type);
@@ -98,11 +83,7 @@ namespace VisualStudioSnippetGenerator.Models
         public string? Type
         {
             get => _type;
-            set
-            {
-                _type = value;
-                Touched = true;
-            }
+            set => SetProperty(ref _type, value, onChanged: () => Touched = true);
         }
 
         [XmlIgnore]

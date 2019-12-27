@@ -1,23 +1,33 @@
 using System.Xml;
 using System.Xml.Serialization;
+using VisualStudioSnippetGenerator.Utilities;
 
 namespace VisualStudioSnippetGenerator.Models
 {
-    public class Code
+    public class Code : ObservableObject
     {
-        public Code() { }
-
-        public Code(string language, string body)
-        {
-            Language = language;
-
-            Body = new[] { new XmlDocument().CreateCDataSection(body) };
-        }
+        private string _body = string.Empty;
+        private string _language = string.Empty;
 
         [XmlAttribute]
-        public string? Language { get; set; }
+        public string Language
+        {
+            get => _language;
+            set => SetProperty(ref _language, value);
+        }
 
         [XmlText]
-        public XmlNode[]? Body { get; set; }
+        public XmlNode[] BodyCData
+        {
+            get => new[] { new XmlDocument().CreateCDataSection(_body) };
+            set { }
+        }
+
+        [XmlIgnore]
+        public string Body
+        {
+            get => _body;
+            set => SetProperty(ref _body, value);
+        }
     }
 }

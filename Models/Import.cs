@@ -1,14 +1,20 @@
+using System;
+using System.Xml.Serialization;
+using VisualStudioSnippetGenerator.Utilities;
+
 namespace VisualStudioSnippetGenerator.Models
 {
-    public class Import : UIIdentifiableBase
+    public class Import : ObservableObject
     {
-        public Import() { }
+        private string _namespace = string.Empty;
 
-        public Import(string @namespace)
+        [XmlIgnore]
+        public string UIIdentifier { get; } = Guid.NewGuid().ToString();
+
+        public string Namespace
         {
-            Namespace = @namespace;
+            get => _namespace;
+            set => SetProperty(ref _namespace, value);
         }
-
-        public string? Namespace { get; set; }
     }
 }

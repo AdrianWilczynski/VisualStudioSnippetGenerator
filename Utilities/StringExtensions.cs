@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace VisualStudioSnippetGenerator.Extensions
+namespace VisualStudioSnippetGenerator.Utilities
 {
     public static class StringExtensions
     {

@@ -1,39 +1,32 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using VisualStudioSnippetGenerator.Utilities;
 
 namespace VisualStudioSnippetGenerator.Models
 {
     public class Snippet
     {
-        private List<Declaration> _declarations = new List<Declaration>();
-
-        public Snippet() { }
-
-        public Snippet(Code code, List<Import> imports, List<Declaration> literals)
-        {
-            Code = code;
-            Declarations = literals;
-            Imports = imports;
-        }
-
         public bool ImportsSpecified => Imports.Count > 0;
 
-        public List<Import> Imports { get; set; } = new List<Import>();
+        public ObservableCollection<Import> Imports { get; set; } = new ObservableCollection<Import>();
 
-        public bool DeclarationsSpecified => _declarations.Count > 0;
+        [XmlIgnore]
+        public ObservableCollection<Declaration> Declarations { get; set; } = new ObservableCollection<Declaration>();
 
-        [XmlArray]
+        public bool DeclarationsArraySpecified => Declarations.Count > 0;
+
+        [XmlArray(nameof(Declarations))]
         [XmlArrayItem(nameof(Literal), typeof(Literal))]
         [XmlArrayItem(nameof(Object), typeof(Object))]
-        public List<Declaration> Declarations
+        public List<Declaration> DeclarationsArray
         {
-            get => _declarations
+            get => Declarations
                 .Select(d => d.TypeSpecified ? new Object(d) : (Declaration)new Literal(d))
                 .ToList();
-            set => _declarations = value;
+            set { }
         }
 
-        public Code? Code { get; set; }
+        public Code Code { get; set; } = new Code();
     }
 }

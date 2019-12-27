@@ -7,9 +7,9 @@ namespace VisualStudioSnippetGenerator.Models
     {
         public SnippetType() { }
 
-        public SnippetType(string? code)
+        public SnippetType(string type)
         {
-            Body = code;
+            Body = type;
         }
 
         [XmlText]
