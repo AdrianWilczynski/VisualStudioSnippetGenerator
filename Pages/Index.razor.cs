@@ -55,12 +55,24 @@ namespace VisualStudioSnippetGenerator.Pages
             {
                 var replacements = ReplacementService.MatchReplacements(code.Body);
                 MapCodeToDeclarations(replacements);
-                Snippet.CodeSnippet.Header.IsSurroundsWith = replacements.Contains(Constants.ReservedKeywords.Selected);
+
+                if (Snippet.CodeSnippet.Header.IsSurroundsWith != replacements.Contains(Constants.ReservedKeywords.Selected))
+                {
+                    Snippet.CodeSnippet.Header.IsSurroundsWith = !Snippet.CodeSnippet.Header.IsSurroundsWith;
+                }
+
+                return;
             }
             else if (e.Sender is Declaration && e.PropertyName == nameof(Declaration.Identifier) && SyncEnabled)
             {
-                Snippet.CodeSnippet.Snippet.Code.Body = ReplacementService.UpdateReplacements(
+                var updated = ReplacementService.UpdateReplacements(
                     Snippet.CodeSnippet.Snippet.Code.Body, (string)e.PreviousValue!, (string)e.CurrentValue!);
+
+                if (updated != Snippet.CodeSnippet.Snippet.Code.Body)
+                {
+                    Snippet.CodeSnippet.Snippet.Code.Body = updated;
+                    return;
+                }
             }
 
             TrySerializeSnippet();
