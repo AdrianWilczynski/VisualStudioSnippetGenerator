@@ -74,7 +74,7 @@
                     <h2 class="h5">@nameof(Snippet.CodeSnippet.Snippet.Imports)</h2>
                     <button type="button" @onclick="AddImport" title="Add Import"
                         class="btn btn-link btn-sm text-decoration-none text-primary p-0">
-                        ➕
+                        <i class="fas fa-plus"></i>
                     </button>
                 </div>
                 <div> 
@@ -117,7 +117,7 @@
                 <h2 class="h5">@nameof(Snippet.CodeSnippet.Snippet.Declarations)</h2>
                 <button type="button" @onclick="AddDeclaration" title="Add Declaration"
                     class="btn btn-link btn-sm text-decoration-none text-primary p-0">
-                    ➕
+                    <i class="fas fa-plus"></i>
                 </button>
             </div>
             <div class="row">
@@ -129,19 +129,19 @@
                             {
                                 <button @onclick="@(() => MoveDeclarationUp(i))" type="button" title="Move up"
                                     class="btn btn-link btn-sm text-decoration-none text-primary">
-                                    ↑
+                                    <i class="fas fa-arrow-up"></i>
                                 </button>
                             }
                             @if (i != Snippet.CodeSnippet.Snippet.Declarations.Count - 1)
                             {
                                 <button @onclick="@(() => MoveDeclarationDown(i))" type="button" title="Move down"
                                     class="btn btn-link btn-sm text-decoration-none text-primary">
-                                    ↓
+                                    <i class="fas fa-arrow-down"></i>
                                 </button>
                             }
                             <button @onclick="@(() => RemoveDeclaration(declaration))" type="button"
                                 title="Remove Declaration" class="btn btn-link btn-sm text-decoration-none text-danger">
-                                🗙
+                                <i class="fas fa-trash"></i>
                             </button>
                         </div>
                         <div class="form-check form-check-inline d-flex justify-content-end mr-2">
