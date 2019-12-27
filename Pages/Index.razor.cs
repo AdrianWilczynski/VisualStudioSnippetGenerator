@@ -149,12 +149,10 @@ namespace VisualStudioSnippetGenerator.Pages
         public void RemoveImportIfEmpty(Import import)
             => WithSync(() =>
             {
-                if (!string.IsNullOrWhiteSpace(import.Namespace))
+                if (string.IsNullOrWhiteSpace(import.Namespace))
                 {
-                    return;
+                    Imports.Remove(import);
                 }
-
-                Imports.Remove(import);
             });
 
         public void AddImport()
@@ -168,33 +166,28 @@ namespace VisualStudioSnippetGenerator.Pages
 
         public void SyncCodeWithDeclarations(IEnumerable<string> replacements)
         {
-            if (!SyncEnabled)
+            if (SyncEnabled)
             {
-                return;
+                Declarations = ReplacementService
+                    .MapReplacementsToDeclarations(replacements, Declarations)
+                    .ToList();
             }
-
-            Declarations = ReplacementService.MapReplacementsToDeclarations(replacements, Declarations)
-                .ToList();
         }
 
         public void SyncCodeWithSnippetType(IEnumerable<string> replacements)
         {
-            if (!SyncEnabled)
+            if (SyncEnabled)
             {
-                return;
+                IsSurroundsWith = replacements.Contains(Constants.ReservedKeywords.Selected);
             }
-
-            IsSurroundsWith = replacements.Contains(Constants.ReservedKeywords.Selected);
         }
 
         public void SyncDeclarationIdentifierWithCode(string oldIdentifier, string newIdentifier)
         {
-            if (!SyncEnabled)
+            if (SyncEnabled)
             {
-                return;
+                _code = ReplacementService.UpdateReplacements(Code, oldIdentifier, newIdentifier);
             }
-
-            _code = ReplacementService.UpdateReplacements(Code, oldIdentifier, newIdentifier);
         }
 
         public override void Sync()
