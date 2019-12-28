@@ -58,6 +58,12 @@ namespace VisualStudioSnippetGenerator.Models
             set => SetProperty(ref _isSurroundsWith, value);
         }
 
+        [XmlIgnore]
+        public bool IsSurroundsWithBackdoor
+        {
+            set => _isSurroundsWith = value;
+        }
+
         public bool SnippetTypesSpecified => SnippetTypes.Count > 0;
 
         public List<SnippetType> SnippetTypes

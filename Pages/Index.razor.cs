@@ -54,20 +54,13 @@ namespace VisualStudioSnippetGenerator.Pages
             if (e.Sender is Code code && e.PropertyName == nameof(Code.Body) && SyncEnabled)
             {
                 var replacements = ReplacementService.MatchReplacements(code.Body);
-                MapCodeToDeclarations(replacements);
-                Snippet.CodeSnippet.Header.IsSurroundsWith = replacements.Contains(Constants.ReservedKeywords.Selected);
-                return;
+                Snippet.CodeSnippet.Snippet.Declarations.ReplaceTroughBackdoor(MapCodeToDeclarations(replacements));
+                Snippet.CodeSnippet.Header.IsSurroundsWithBackdoor = replacements.Contains(Constants.ReservedKeywords.Selected);
             }
             else if (e.Sender is Declaration && e.PropertyName == nameof(Declaration.Identifier) && SyncEnabled)
             {
-                var updated = ReplacementService.UpdateReplacements(
+                Snippet.CodeSnippet.Snippet.Code.BodyBackdoor = ReplacementService.UpdateReplacements(
                     Snippet.CodeSnippet.Snippet.Code.Body, (string)e.PreviousValue!, (string)e.CurrentValue!);
-
-                if (updated != Snippet.CodeSnippet.Snippet.Code.Body)
-                {
-                    Snippet.CodeSnippet.Snippet.Code.Body = updated;
-                    return;
-                }
             }
 
             TrySerializeSnippet();
@@ -94,7 +87,7 @@ namespace VisualStudioSnippetGenerator.Pages
             Snippet.CodeSnippet.Snippet.Declarations.Add(declaration);
         }
 
-        public void MapCodeToDeclarations(IEnumerable<string> replacements)
+        public IEnumerable<Declaration> MapCodeToDeclarations(IEnumerable<string> replacements)
         {
             var afterMaping = Snippet.CodeSnippet.Snippet.Declarations
                 .Where(d => replacements.Contains(d.Identifier) || d.Touched)
@@ -116,7 +109,7 @@ namespace VisualStudioSnippetGenerator.Pages
                 toUnsubscribe.OnChanged -= OnSnippetChanged;
             }
 
-            Snippet.CodeSnippet.Snippet.Declarations.Replace(afterMaping);
+            return afterMaping;
         }
 
         public void RemoveDeclaration(Declaration declaration)

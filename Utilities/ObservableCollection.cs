@@ -29,11 +29,8 @@ namespace VisualStudioSnippetGenerator.Utilities
             OnChanged?.Invoke(new ObservableObjectChangedArgs(this));
         }
 
-        public void Replace(IEnumerable<T> elements)
-        {
-            _list = elements.ToList();
-            OnChanged?.Invoke(new ObservableObjectChangedArgs(this));
-        }
+        public void ReplaceTroughBackdoor(IEnumerable<T> elements)
+            => _list = elements.ToList();
 
         public int Count => _list.Count;
 

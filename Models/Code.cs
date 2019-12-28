@@ -29,5 +29,11 @@ namespace VisualStudioSnippetGenerator.Models
             get => _body;
             set => SetProperty(ref _body, value);
         }
+
+        [XmlIgnore]
+        public string BodyBackdoor
+        {
+            set => _body = value;
+        }
     }
 }
