@@ -11,7 +11,7 @@ namespace VisualStudioSnippetGenerator.Services
         public string ToReplacement(string identifier) => $"${identifier}$";
 
         public string UpdateReplacements(string code, string oldIdentifier, string newIdentifier)
-            => Regex.IsMatch(newIdentifier, @"^[^$]+$")
+            => Regex.IsMatch(newIdentifier, "^[^$]+$")
             ? code.Replace(ToReplacement(oldIdentifier), ToReplacement(newIdentifier))
             : code;
 
