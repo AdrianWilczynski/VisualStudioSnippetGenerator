@@ -8,9 +8,6 @@ namespace VisualStudioSnippetGenerator.Models
     {
         private string _namespace = string.Empty;
 
-        [XmlIgnore]
-        public string UIIdentifier { get; } = Guid.NewGuid().ToString();
-
         public string Namespace
         {
             get => _namespace;

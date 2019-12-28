@@ -36,9 +36,6 @@ namespace VisualStudioSnippetGenerator.Models
             _type = declaration.Type;
         }
 
-        [XmlIgnore]
-        public string UIIdentifier { get; } = Guid.NewGuid().ToString();
-
         [XmlElement("ID")]
         public string Identifier
         {

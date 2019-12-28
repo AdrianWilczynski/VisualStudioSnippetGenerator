@@ -6,5 +6,4 @@ namespace VisualStudioSnippetGenerator.Models
 
         public Literal(Declaration declaration) : base(declaration) { }
     }
-
 }

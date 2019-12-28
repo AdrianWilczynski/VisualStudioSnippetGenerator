@@ -68,13 +68,13 @@
                     </button>
                 </div>
                 <div> 
-                    @foreach (var import in Snippet.CodeSnippet.Snippet.Imports)
+                    @foreach (var (import, i) in Snippet.CodeSnippet.Snippet.Imports.Select((i, j) => (i, j)))
                     {
                         <div class="form-group">
-                            <label for="@import.UIIdentifier" class="small">
+                            <label for="@(nameof(import) + i)" class="small">
                                 @nameof(import.Namespace)
                             </label>
-                            <FocusedInput id="@import.UIIdentifier" class="form-control" @bind-Value="import.Namespace"
+                            <FocusedInput id="@(nameof(import) + i)" class="form-control" @bind-Value="import.Namespace"
                                 @bind-Value:event="ValueInput" @onblur="@(_ => RemoveImportIfEmpty(import))" />
                         </div>
                     }
@@ -136,53 +136,52 @@
                         </div>
                         <div class="form-check form-check-inline d-flex justify-content-end mr-2">
                             <label class="form-check-label small mr-2"
-                                for="@nameof(@declaration.Editable)-@declaration.UIIdentifier">
+                                for="@(nameof(declaration.Editable) + i)">
                                 @nameof(declaration.Editable)
                             </label>
-                            <input id="@nameof(@declaration.Editable)-@declaration.UIIdentifier" type="checkbox"
+                            <input id="@(nameof(declaration.Editable) + i)" type="checkbox"
                                 @bind="declaration.Editable" class="form-check-input mr-0" />
                         </div>
                         <div class="form-group">
-                            <label for="@nameof(@declaration.Identifier)-@declaration.UIIdentifier" class="small">
+                            <label for="@(nameof(declaration.Identifier) + i)" class="small">
                                 @nameof(declaration.Identifier)
                             </label>
-                            <FocusedInput id="@(nameof(declaration.Identifier) + '-' + declaration.UIIdentifier)"
+                            <FocusedInput id="@(nameof(declaration.Identifier) + i)"
                                 Focus="declaration.Focus" @bind-Value="declaration.Identifier"
                                 class="form-control form-control-sm border border-primary" />
                         </div>
                         <div class="form-group">
-                            <label for="@nameof(@declaration.DefaultValue)-@declaration.UIIdentifier" class="small">
+                            <label for="@(nameof(declaration.DefaultValue) + i)" class="small">
                                 @nameof(declaration.DefaultValue).ToSeparateWords()
                             </label>
-                            <input id="@nameof(@declaration.DefaultValue)-@declaration.UIIdentifier"
+                            <input id="@(nameof(declaration.DefaultValue) + i)"
                                 @bind-value="declaration.DefaultValue" @bind-value:event="oninput"
                                 class="form-control form-control-sm border border-primary" />
                         </div>
                         <div class="form-group">
-                            <label for="@nameof(@declaration.ToolTip)-@declaration.UIIdentifier" class="small">
+                            <label for="@(nameof(declaration.ToolTip) + i)" class="small">
                                 @nameof(declaration.ToolTip)
                             </label>
-                            <input id="@nameof(@declaration.ToolTip)-@declaration.UIIdentifier"
+                            <input id="@(nameof(declaration.ToolTip) + i)"
                                 @bind-value="declaration.ToolTip" @bind-value:event="oninput"
                                 class="form-control form-control-sm" />
                         </div>
                         <div class="form-group">
-                            <label for="@nameof(@declaration.Type)-@declaration.UIIdentifier" class="small">
+                            <label for="@(nameof(declaration.Type) + i)" class="small">
                                 @nameof(declaration.Type)
                             </label>
-                            <input id="@nameof(@declaration.Type)-@declaration.UIIdentifier"
-                                @bind-value="declaration.Type" @bind-value:event="oninput"
-                                class="form-control form-control-sm" />
+                            <input id="@(nameof(declaration.Type) + i)" @bind-value="declaration.Type"
+                                @bind-value:event="oninput" class="form-control form-control-sm" />
                         </div>
                         @if(IsCSharp)
                         {
                             <div class="form-group">
-                                <label for="@nameof(@declaration.Function)-@declaration.UIIdentifier" class="small">
+                                <label for="@(nameof(declaration.Function) + i)" class="small">
                                     @nameof(declaration.Function)
                                 </label>
-                                <input id="@nameof(@declaration.Function)-@declaration.UIIdentifier"
-                                    @bind-value="declaration.Function" @bind-value:event="oninput"
-                                    list="@nameof(Constants.Functions)" class="form-control form-control-sm" />
+                                <input id="@(nameof(declaration.Function) + i)" @bind-value="declaration.Function"
+                                    @bind-value:event="oninput" list="@nameof(Constants.Functions)"
+                                    class="form-control form-control-sm" />
                             </div>
 
                             <DataList Id="@nameof(Constants.Functions)" Options="Constants.Functions" />
