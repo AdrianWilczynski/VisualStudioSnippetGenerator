@@ -55,12 +55,7 @@ namespace VisualStudioSnippetGenerator.Pages
             {
                 var replacements = ReplacementService.MatchReplacements(code.Body);
                 MapCodeToDeclarations(replacements);
-
-                if (Snippet.CodeSnippet.Header.IsSurroundsWith != replacements.Contains(Constants.ReservedKeywords.Selected))
-                {
-                    Snippet.CodeSnippet.Header.IsSurroundsWith = !Snippet.CodeSnippet.Header.IsSurroundsWith;
-                }
-
+                Snippet.CodeSnippet.Header.IsSurroundsWith = replacements.Contains(Constants.ReservedKeywords.Selected);
                 return;
             }
             else if (e.Sender is Declaration && e.PropertyName == nameof(Declaration.Identifier) && SyncEnabled)
