@@ -109,95 +109,102 @@
                     class="btn btn-link btn-sm text-decoration-none text-primary p-0">
                     <i class="fas fa-plus"></i>
                 </button>
-            </div>
-            <div class="row">
-                @foreach (var (declaration, i) in Snippet.CodeSnippet.Snippet.Declarations.Select((d, i) => (d, i)))
-                {
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="d-flex justify-content-end">
-                            @if (i != 0)
-                            {
-                                <button @onclick="@(() => MoveDeclarationUp(i))" type="button" title="Move up"
-                                    class="btn btn-link btn-sm text-decoration-none text-primary">
-                                    <i class="fas fa-arrow-up"></i>
-                                </button>
-                            }
-                            @if (i != Snippet.CodeSnippet.Snippet.Declarations.Count - 1)
-                            {
-                                <button @onclick="@(() => MoveDeclarationDown(i))" type="button" title="Move down"
-                                    class="btn btn-link btn-sm text-decoration-none text-primary">
-                                    <i class="fas fa-arrow-down"></i>
-                                </button>
-                            }
-                            <button @onclick="@(() => RemoveDeclaration(declaration))" type="button"
-                                title="Remove Declaration" class="btn btn-link btn-sm text-decoration-none text-danger">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                        <div class="form-check form-check-inline d-flex justify-content-end mr-2">
-                            <label class="form-check-label small mr-2"
-                                for="@(nameof(declaration.Editable) + i)">
-                                @nameof(declaration.Editable)
-                            </label>
-                            <input id="@(nameof(declaration.Editable) + i)" type="checkbox"
-                                @bind="declaration.Editable" class="form-check-input mr-0" />
-                        </div>
-                        <div class="form-group">
-                            <label for="@(nameof(declaration.Identifier) + i)" class="small">
-                                @nameof(declaration.Identifier)
-                            </label>
-                            <FocusedInput id="@(nameof(declaration.Identifier) + i)"
-                                Focus="declaration.Focus" @bind-Value="declaration.Identifier"
-                                class="form-control form-control-sm border border-primary" />
-                        </div>
-                        <div class="form-group">
-                            <label for="@(nameof(declaration.DefaultValue) + i)" class="small">
-                                @nameof(declaration.DefaultValue).ToSeparateWords()
-                            </label>
-                            <input id="@(nameof(declaration.DefaultValue) + i)"
-                                @bind-value="declaration.DefaultValue" @bind-value:event="oninput"
-                                class="form-control form-control-sm border border-primary" />
-                        </div>
-                        <div class="form-group">
-                            <label for="@(nameof(declaration.ToolTip) + i)" class="small">
-                                @nameof(declaration.ToolTip)
-                            </label>
-                            <input id="@(nameof(declaration.ToolTip) + i)"
-                                @bind-value="declaration.ToolTip" @bind-value:event="oninput"
-                                class="form-control form-control-sm" />
-                        </div>
-                        <div class="form-group">
-                            <label for="@(nameof(declaration.Type) + i)" class="small">
-                                @nameof(declaration.Type)
-                            </label>
-                            <input id="@(nameof(declaration.Type) + i)" @bind-value="declaration.Type"
-                                @bind-value:event="oninput" class="form-control form-control-sm" />
-                        </div>
-                        @if(IsCSharp)
-                        {
-                            <div class="form-group">
-                                <label for="@(nameof(declaration.Function) + i)" class="small">
-                                    @nameof(declaration.Function)
-                                </label>
-                                <input id="@(nameof(declaration.Function) + i)" @bind-value="declaration.Function"
-                                    @bind-value:event="oninput" list="@nameof(Constants.Functions)"
-                                    class="form-control form-control-sm" />
-                            </div>
+            </div>   
+            @if(Snippet.CodeSnippet.Snippet.Declarations.Count == 0)
+            {
+                <div>
+                    Input <i>$@nameof(Declaration.Identifier)$</i> into <i>@nameof(Code)</i> or click <i>plus</i>
+                    button to add <i>@nameof(Declaration)</i>.
+                </div>
+            }
+            else
+            {
+                <details open>
+                    <summary>Literals & Objects</summary>
 
-                            <DataList Id="@nameof(Constants.Functions)" Options="Constants.Functions" />
+                    <div class="row">
+                        @foreach (var (declaration, i) in Snippet.CodeSnippet.Snippet.Declarations.Select((d, i) => (d, i)))
+                        {
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="d-flex justify-content-end">
+                                    @if (i != 0)
+                                    {
+                                        <button @onclick="@(() => MoveDeclarationUp(i))" type="button" title="Move up"
+                                            class="btn btn-link btn-sm text-decoration-none text-primary">
+                                            <i class="fas fa-arrow-up"></i>
+                                        </button>
+                                    }
+                                    @if (i != Snippet.CodeSnippet.Snippet.Declarations.Count - 1)
+                                    {
+                                        <button @onclick="@(() => MoveDeclarationDown(i))" type="button" title="Move down"
+                                            class="btn btn-link btn-sm text-decoration-none text-primary">
+                                            <i class="fas fa-arrow-down"></i>
+                                        </button>
+                                    }
+                                    <button @onclick="@(() => RemoveDeclaration(declaration))" type="button"
+                                        title="Remove Declaration" class="btn btn-link btn-sm text-decoration-none text-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                                <div class="form-check form-check-inline d-flex justify-content-end mr-2">
+                                    <label class="form-check-label small mr-2"
+                                        for="@(nameof(declaration.Editable) + i)">
+                                        @nameof(declaration.Editable)
+                                    </label>
+                                    <input id="@(nameof(declaration.Editable) + i)" type="checkbox"
+                                        @bind="declaration.Editable" class="form-check-input mr-0" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="@(nameof(declaration.Identifier) + i)" class="small">
+                                        @nameof(declaration.Identifier)
+                                    </label>
+                                    <FocusedInput id="@(nameof(declaration.Identifier) + i)"
+                                        Focus="declaration.Focus" @bind-Value="declaration.Identifier"
+                                        class="form-control form-control-sm border border-primary" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="@(nameof(declaration.DefaultValue) + i)" class="small">
+                                        @nameof(declaration.DefaultValue).ToSeparateWords()
+                                    </label>
+                                    <input id="@(nameof(declaration.DefaultValue) + i)"
+                                        @bind-value="declaration.DefaultValue" @bind-value:event="oninput"
+                                        class="form-control form-control-sm border border-primary" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="@(nameof(declaration.ToolTip) + i)" class="small">
+                                        @nameof(declaration.ToolTip)
+                                    </label>
+                                    <input id="@(nameof(declaration.ToolTip) + i)"
+                                        @bind-value="declaration.ToolTip" @bind-value:event="oninput"
+                                        class="form-control form-control-sm" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="@(nameof(declaration.Type) + i)" class="small">
+                                        @nameof(declaration.Type)
+                                    </label>
+                                    <input id="@(nameof(declaration.Type) + i)" @bind-value="declaration.Type"
+                                        @bind-value:event="oninput" class="form-control form-control-sm" />
+                                </div>
+                                @if(IsCSharp)
+                                {
+                                    <div class="form-group">
+                                        <label for="@(nameof(declaration.Function) + i)" class="small">
+                                            @nameof(declaration.Function)
+                                        </label>
+                                        <input id="@(nameof(declaration.Function) + i)" @bind-value="declaration.Function"
+                                            @bind-value:event="oninput" list="@nameof(Constants.Functions)"
+                                            class="form-control form-control-sm" />
+                                    </div>
+        
+                                    <DataList Id="@nameof(Constants.Functions)" Options="Constants.Functions" />
+                                }
+                            </div>
                         }
                     </div>
-                }
-                
-                @if(Snippet.CodeSnippet.Snippet.Declarations.Count == 0)
-                {
-                    <p class="pl-3">
-                        Input <i>$@nameof(Declaration.Identifier)$</i> into <i>@nameof(Code)</i> or click <i>plus</i> button to add <i>@nameof(Declaration)</i>.
-                    </p>
-                }
-            </div>
+                </details>
+            }
         </div>
-        <div class="form-group">
+        <div class="form-group mt-2">
             <label for="@nameof(SnippetText)" class="h5">@nameof(SnippetText).ToSeparateWords()</label>
             <textarea id="@nameof(SnippetText)" @bind="SnippetText" class="form-control border border-primary"
                 rows=30></textarea>
