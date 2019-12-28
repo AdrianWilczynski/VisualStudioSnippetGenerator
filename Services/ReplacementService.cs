@@ -6,30 +6,19 @@ namespace VisualStudioSnippetGenerator.Services
 {
     public class ReplacementService
     {
-        public const string IdentifierRegex = @"([^\s$]+)";
+        public const string ReplacementRegex = @"\$([^\s$]*)\$";
 
-        public string ReplacementRegex(string identifierRegex)
-            => $@"(?<!\$)\${identifierRegex}\$(?!\$)";
-
-        public string ToReplacement(string identifier)
-            => $"${identifier}$";
-
-        public bool IsIdentifier(string identifier)
-            => Regex.IsMatch(identifier, $"^{IdentifierRegex}$");
+        public string ToReplacement(string identifier) => $"${identifier}$";
 
         public string UpdateReplacements(string code, string oldIdentifier, string newIdentifier)
-        {
-            if (!IsIdentifier(newIdentifier))
-            {
-                return code;
-            }
-
-            return Regex.Replace(code, ReplacementRegex(Regex.Escape(oldIdentifier)), ToReplacement(newIdentifier));
-        }
+            => Regex.IsMatch(newIdentifier, @"^[^\s$]+$")
+            ? code.Replace(ToReplacement(oldIdentifier), ToReplacement(newIdentifier))
+            : code;
 
         public IEnumerable<string> MatchReplacements(string code)
             => Regex
-                .Matches(code, ReplacementRegex(IdentifierRegex))
-                .Select(m => m.Groups[1].Value);
+                .Matches(code, ReplacementRegex)
+                .Select(m => m.Groups[1].Value)
+                .Where(i => i.Length != 0);
     }
 }
