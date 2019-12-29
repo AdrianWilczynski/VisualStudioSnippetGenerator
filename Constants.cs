@@ -22,6 +22,21 @@ namespace VisualStudioSnippetGenerator
             };
         }
 
+        public static IEnumerable<string> Kinds => new[]
+        {
+            "method body",
+            "method decl",
+            "type decl",
+            "page",
+            "file",
+            "any"
+        };
+
+        public static class Delimeter
+        {
+            public const char Default = '$';
+        }
+
         public static class ReservedKeywords
         {
             public const string End = "end";

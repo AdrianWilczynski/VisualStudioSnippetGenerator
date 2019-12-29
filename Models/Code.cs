@@ -8,12 +8,42 @@ namespace VisualStudioSnippetGenerator.Models
     {
         private string _body = string.Empty;
         private string _language = string.Empty;
+        private string? _kind;
+        private char _delimiter = Constants.Delimeter.Default;
 
         [XmlAttribute]
         public string Language
         {
             get => _language;
             set => SetProperty(ref _language, value);
+        }
+
+        public bool KindSpecified => !string.IsNullOrWhiteSpace(Kind);
+
+        [XmlAttribute]
+        public string? Kind
+        {
+            get => _kind;
+            set => SetProperty(ref _kind, value);
+        }
+
+        [XmlIgnore]
+        public char Delimiter
+        {
+            get => _delimiter;
+            set => SetProperty(ref _delimiter,
+                value != '\0' && !string.IsNullOrWhiteSpace(value.ToString())
+                ? value
+                : Constants.Delimeter.Default);
+        }
+
+        public bool DelimiterStringSpecified => Delimiter != Constants.Delimeter.Default;
+
+        [XmlAttribute(nameof(Delimiter))]
+        public string DelimiterString
+        {
+            get => Delimiter.ToString();
+            set { }
         }
 
         [XmlText]

@@ -51,20 +51,40 @@ namespace VisualStudioSnippetGenerator.Pages
 
         public void OnSnippetChanged(ObservableObjectChangedArgs e)
         {
-            if (e.Sender is Code code && e.PropertyName == nameof(Code.Body) && SyncEnabled)
+            if (e.Sender is Code && e.PropertyName == nameof(Code.Body) && SyncEnabled)
             {
-                var replacements = ReplacementService.MatchReplacements(code.Body);
+                var replacements = ReplacementService.MatchReplacements(
+                    Snippet.CodeSnippet.Snippet.Code.Body,
+                    Snippet.CodeSnippet.Snippet.Code.Delimiter);
+
                 Snippet.CodeSnippet.Snippet.Declarations.ReplaceTroughBackdoor(MapCodeToDeclarations(replacements));
+
                 Snippet.CodeSnippet.Header.IsSurroundsWithBackdoor = replacements.Contains(Constants.ReservedKeywords.Selected);
             }
             else if (e.Sender is Declaration && e.PropertyName == nameof(Declaration.Identifier) && SyncEnabled)
             {
                 Snippet.CodeSnippet.Snippet.Code.BodyBackdoor = ReplacementService.UpdateReplacements(
-                    Snippet.CodeSnippet.Snippet.Code.Body, (string)e.PreviousValue!, (string)e.CurrentValue!);
+                    Snippet.CodeSnippet.Snippet.Code.Body,
+                    (string)e.PreviousValue!, (string)e.CurrentValue!,
+                    Snippet.CodeSnippet.Snippet.Code.Delimiter);
+            }
+            else if (e.Sender is Code && e.PropertyName == nameof(Code.Delimiter) && SyncEnabled)
+            {
+                var newDelimeter = ((char)e.CurrentValue!);
+                var oldDelimeter = ((char)e.PreviousValue!);
+
+                Snippet.CodeSnippet.Snippet.Code.BodyBackdoor = ReplacementService.Escape(
+                    Snippet.CodeSnippet.Snippet.Code.Body, newDelimeter);
+
+                Snippet.CodeSnippet.Snippet.Code.BodyBackdoor = ReplacementService.UpdateReplacements(
+                    Snippet.CodeSnippet.Snippet.Code.Body,
+                    oldDelimeter, newDelimeter);
+
+                Snippet.CodeSnippet.Snippet.Code.BodyBackdoor = ReplacementService.Unescape(
+                    Snippet.CodeSnippet.Snippet.Code.Body, oldDelimeter);
             }
 
             TrySerializeSnippet();
-            StateHasChanged();
         }
 
         public void TrySerializeSnippet()
