@@ -129,8 +129,9 @@
             @if(Snippet.CodeSnippet.Snippet.Declarations.Count == 0)
             {
                 <div>
-                    Input <i>$@nameof(Declaration.Identifier)$</i> into <i>@nameof(Code)</i> or click <i>plus</i>
-                    button to add <i>@nameof(Declaration)</i>.
+                    Input
+                    <i>@Snippet.CodeSnippet.Snippet.Code.Delimiter@nameof(Declaration.Identifier)@Snippet.CodeSnippet.Snippet.Code.Delimiter</i>
+                    into <i>@nameof(Code)</i> or click <i>plus</i> button to add <i>@nameof(Declaration)</i>.
                 </div>
             }
             else
