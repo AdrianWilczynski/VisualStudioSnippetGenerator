@@ -70,8 +70,8 @@ namespace VisualStudioSnippetGenerator.Pages
             }
             else if (e.Sender is Code && e.PropertyName == nameof(Code.Delimiter) && SyncEnabled)
             {
-                var newDelimeter = ((char)e.CurrentValue!);
-                var oldDelimeter = ((char)e.PreviousValue!);
+                var newDelimeter = (char)e.CurrentValue!;
+                var oldDelimeter = (char)e.PreviousValue!;
 
                 Snippet.CodeSnippet.Snippet.Code.BodyBackdoor = ReplacementService.Escape(
                     Snippet.CodeSnippet.Snippet.Code.Body, newDelimeter);
