@@ -12,7 +12,7 @@ namespace VisualStudioSnippetGenerator.Pages
     {
         public Index()
         {
-            Snippet = new VisualStudioSnippet();
+            Snippet = new CodeSnippets();
 
             Snippet.CodeSnippet.Header.OnChanged += OnSnippetChanged;
             Snippet.CodeSnippet.Snippet.Declarations.OnChanged += OnSnippetChanged;
@@ -20,7 +20,7 @@ namespace VisualStudioSnippetGenerator.Pages
             Snippet.CodeSnippet.Snippet.Code.OnChanged += OnSnippetChanged;
         }
 
-        public VisualStudioSnippet Snippet { get; set; }
+        public CodeSnippets Snippet { get; set; }
 
         public string SnippetText { get; set; } = string.Empty;
 

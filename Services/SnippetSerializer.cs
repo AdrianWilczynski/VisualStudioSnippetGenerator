@@ -14,10 +14,10 @@ namespace VisualStudioSnippetGenerator.Services
 
         public SnippetSerializer()
         {
-            _xmlSerializer = new XmlSerializer(typeof(VisualStudioSnippet), DefaultNamespace);
+            _xmlSerializer = new XmlSerializer(typeof(CodeSnippets), DefaultNamespace);
         }
 
-        public string Serialize(VisualStudioSnippet snippet)
+        public string Serialize(CodeSnippets snippet)
         {
             var xmlNamespaces = new XmlSerializerNamespaces();
             xmlNamespaces.Add(string.Empty, DefaultNamespace);
