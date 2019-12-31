@@ -1,16 +1,10 @@
 // @ts-check
 
 /**
- * @param {string} id
+ * @param {HTMLTextAreaElement | HTMLInputElement} element
  */
-function copyToClipboard(id) {
-    const input = document.getElementById(id);
-
-    if (!(input instanceof HTMLTextAreaElement || input instanceof HTMLInputElement)) {
-        throw new Error('Expected HTMLTextAreaElement or HTMLInputElement.');
-    }
-
-    input.select();
+function copyToClipboard(element) {
+    element.select();
     document.execCommand('copy');
 }
 
@@ -19,4 +13,17 @@ function copyToClipboard(id) {
  */
 function focus(element) {
     element.focus();
+}
+
+/**
+ * @param {string} fileName
+ * @param {string} contents
+ */
+function saveFile(fileName, contents) {
+    const link = document.createElement('a');
+    link.download = fileName;
+    link.href = "data:application/octet-stream;charset=utf-8," + encodeURIComponent(contents)
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }

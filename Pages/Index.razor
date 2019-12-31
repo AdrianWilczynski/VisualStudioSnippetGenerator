@@ -226,11 +226,16 @@
         </div>
         <div class="form-group mt-2">
             <label for="@nameof(SnippetText)" class="h5">@nameof(SnippetText).ToSeparateWords()</label>
-            <textarea id="@nameof(SnippetText)" @bind="SnippetText" class="form-control border border-primary"
-                rows=30></textarea>
+            <textarea id="@nameof(SnippetText)" @bind="SnippetText" @ref="SnippetTextarea"
+                class="form-control border border-primary" rows=30></textarea>
         </div>
         <div class="d-flex justify-content-end">
-            <CopyToClipboard TargetId="@nameof(SnippetText)" />
+            <button type="button" @onclick="SaveFileAsync" class="btn btn-primary m-1">
+                <i class="fas fa-save"></i> Save!
+            </button>
+            <button type="button" @onclick="CopyToClipboardAsync" class="btn btn-primary m-1">
+                <i class="fas fa-copy"></i> Copy to Clipboard!
+            </button>
         </div>
     </div>
 </form>

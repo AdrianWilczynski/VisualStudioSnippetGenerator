@@ -4,6 +4,10 @@ namespace VisualStudioSnippetGenerator
 {
     public static class Constants
     {
+        public const string SnippetFileExtension = ".snippet";
+
+        public const string DefaultSnippetName = "new_snippet";
+
         public static class Languages
         {
             public const string CSharp = "CSharp";

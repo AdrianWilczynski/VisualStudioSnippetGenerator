@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using VisualStudioSnippetGenerator.Utilities;
+using Microsoft.JSInterop;
+using System.Threading.Tasks;
 
 namespace VisualStudioSnippetGenerator.Pages
 {
@@ -19,10 +21,6 @@ namespace VisualStudioSnippetGenerator.Pages
             Snippet.CodeSnippet.Snippet.Imports.OnChanged += OnSnippetChanged;
             Snippet.CodeSnippet.Snippet.Code.OnChanged += OnSnippetChanged;
         }
-
-        public CodeSnippets Snippet { get; set; }
-
-        public string SnippetText { get; set; } = string.Empty;
 
 #nullable disable
         private SnippetSerializer _snippetSerializer;
@@ -40,7 +38,16 @@ namespace VisualStudioSnippetGenerator.Pages
 
         [Inject]
         public ReplacementService ReplacementService { get; set; }
+
+        [Inject]
+        public IJSRuntime JSRuntime { get; set; }
 #nullable enable
+
+        public CodeSnippets Snippet { get; set; }
+
+        public ElementReference SnippetTextarea { get; set; }
+
+        public string SnippetText { get; set; } = string.Empty;
 
         public string? Error { get; set; }
 
@@ -159,5 +166,16 @@ namespace VisualStudioSnippetGenerator.Pages
 
         public void MoveDeclarationDown(int index)
             => Snippet.CodeSnippet.Snippet.Declarations.Move(index, index + 1);
+
+        public async Task CopyToClipboardAsync()
+            => await JSRuntime.InvokeVoidAsync("copyToClipboard", SnippetTextarea);
+
+        public string ToFileName(string? title)
+            => (string.IsNullOrWhiteSpace(title)
+            ? Constants.DefaultSnippetName
+            : title.OnlyWordCharacters().ToLower()) + Constants.SnippetFileExtension;
+
+        public async Task SaveFileAsync()
+            => await JSRuntime.InvokeVoidAsync("saveFile", ToFileName(Snippet.CodeSnippet.Header.Title), SnippetText);
     }
 }
