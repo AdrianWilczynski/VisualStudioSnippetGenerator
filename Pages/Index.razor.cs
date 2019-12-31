@@ -58,14 +58,15 @@ namespace VisualStudioSnippetGenerator.Pages
 
         public void OnSnippetChanged(ObservableObjectChangedArgs e)
         {
+            IEnumerable<string>? replacements = null;
+
             if (e.Sender is Code && e.PropertyName == nameof(Code.Body) && SyncEnabled)
             {
-                var replacements = ReplacementService.MatchReplacements(
+                replacements = ReplacementService.MatchReplacements(
                     Snippet.CodeSnippet.Snippet.Code.Body,
                     Snippet.CodeSnippet.Snippet.Code.Delimiter);
 
                 Snippet.CodeSnippet.Snippet.Declarations.ReplaceTroughBackdoor(MapCodeToDeclarations(replacements));
-
                 Snippet.CodeSnippet.Header.IsSurroundsWithBackdoor = replacements.Contains(Constants.ReservedKeywords.Selected);
             }
             else if (e.Sender is Declaration && e.PropertyName == nameof(Declaration.Identifier) && SyncEnabled)
@@ -90,6 +91,12 @@ namespace VisualStudioSnippetGenerator.Pages
                 Snippet.CodeSnippet.Snippet.Code.BodyBackdoor = ReplacementService.Unescape(
                     Snippet.CodeSnippet.Snippet.Code.Body, oldDelimeter);
             }
+
+            replacements ??= ReplacementService.MatchReplacements(
+                    Snippet.CodeSnippet.Snippet.Code.Body,
+                    Snippet.CodeSnippet.Snippet.Code.Delimiter);
+
+            Snippet.CodeSnippet.Snippet.Code.AppendEndKeyword = !replacements.Contains(Constants.ReservedKeywords.End);
 
             TrySerializeSnippet();
         }

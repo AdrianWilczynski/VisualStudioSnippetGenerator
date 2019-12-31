@@ -49,9 +49,13 @@ namespace VisualStudioSnippetGenerator.Models
         [XmlText]
         public XmlNode[] BodyCData
         {
-            get => new[] { new XmlDocument().CreateCDataSection(_body) };
+            get => new[] { new XmlDocument().CreateCDataSection(
+                _body + (AppendEndKeyword ? Delimiter + Constants.ReservedKeywords.End + Delimiter : string.Empty)) };
             set { }
         }
+
+        [XmlIgnore]
+        public bool AppendEndKeyword { get; set; } = true;
 
         [XmlIgnore]
         public string Body
