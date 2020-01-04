@@ -68,7 +68,7 @@ namespace VisualStudioSnippetGenerator.Models
 
         public List<SnippetType> SnippetTypes
         {
-            get => new List<SnippetType>()
+            get => Enumerable.Empty<SnippetType>()
                 .Append(IsExpansion ? new SnippetType(Constants.SnippetTypes.Expansion) : null)
                 .Append(IsSurroundsWith ? new SnippetType(Constants.SnippetTypes.SurroundsWith) : null)
                 .Where(s => s != null)

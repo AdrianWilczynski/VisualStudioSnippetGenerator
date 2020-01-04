@@ -96,7 +96,7 @@ namespace VisualStudioSnippetGenerator.Pages
                     Snippet.CodeSnippet.Snippet.Code.Body,
                     Snippet.CodeSnippet.Snippet.Code.Delimiter);
 
-            Snippet.CodeSnippet.Snippet.Code.AppendEndKeyword = !replacements.Contains(Constants.ReservedKeywords.End);
+            Snippet.CodeSnippet.Snippet.Code.HasEndKeyword = replacements.Contains(Constants.ReservedKeywords.End);
 
             TrySerializeSnippet();
         }

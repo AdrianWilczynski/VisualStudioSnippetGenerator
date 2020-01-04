@@ -10,6 +10,7 @@ namespace VisualStudioSnippetGenerator.Models
         private string _language = string.Empty;
         private string? _kind;
         private char _delimiter = Constants.Delimeter.Default;
+        private bool _shouldAppendEndKeyword = true;
 
         [XmlAttribute]
         public string Language
@@ -49,13 +50,26 @@ namespace VisualStudioSnippetGenerator.Models
         [XmlText]
         public XmlNode[] BodyCData
         {
-            get => new[] { new XmlDocument().CreateCDataSection(
-                _body + (AppendEndKeyword ? Delimiter + Constants.ReservedKeywords.End + Delimiter : string.Empty)) };
+            get => new[]
+            {
+                new XmlDocument().CreateCDataSection(
+                _body +
+                (ShouldAppendEndKeyword && !HasEndKeyword
+                ? Delimiter + Constants.ReservedKeywords.End + Delimiter
+                : string.Empty))
+            };
             set { }
         }
 
         [XmlIgnore]
-        public bool AppendEndKeyword { get; set; } = true;
+        public bool HasEndKeyword { get; set; }
+
+        [XmlIgnore]
+        public bool ShouldAppendEndKeyword
+        {
+            get => _shouldAppendEndKeyword;
+            set => SetProperty(ref _shouldAppendEndKeyword, value);
+        }
 
         [XmlIgnore]
         public string Body

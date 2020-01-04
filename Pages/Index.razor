@@ -104,6 +104,15 @@
                 </div>
             </div>
             <div class="d-flex justify-content-end">
+                <div class="form-check form-check-inline">
+                    <label class="form-check-label mr-2"
+                        for="@nameof(Snippet.CodeSnippet.Snippet.Code.ShouldAppendEndKeyword)">
+                        @nameof(Snippet.CodeSnippet.Snippet.Code.ShouldAppendEndKeyword).ToSeparateWords()
+                    </label>
+                    <input type="checkbox" @bind="Snippet.CodeSnippet.Snippet.Code.ShouldAppendEndKeyword"
+                        id="@nameof(Snippet.CodeSnippet.Snippet.Code.ShouldAppendEndKeyword)"
+                        class="form-check-input mr-0">
+                </div>
                 <div class="form-check form-check-inline mr-0">
                     <label class="form-check-label mr-2" for="@nameof(SyncEnabled)">
                         @nameof(SyncEnabled).ToSeparateWords()
