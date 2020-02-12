@@ -4,105 +4,109 @@
         <div class="col-12 col-md-6">
             <Alert Error="@Error" />
 
-            <div class="row">
-                <div class="form-group col-12 col-lg-6">
-                    <label for="@nameof(Snippet.CodeSnippet.Header.Title)"
-                        class="h5">@nameof(Snippet.CodeSnippet.Header.Title)</label>
-                    <input id="@nameof(Snippet.CodeSnippet.Header.Title)" @bind-value="Snippet.CodeSnippet.Header.Title"
-                        @bind-value:event="oninput" class="form-control border border-primary" />
-                </div>
-                <div class="form-group col-12 col-lg-6">
-                    <label for="@nameof(Snippet.CodeSnippet.Header.Shortcut)"
-                        class="h5">@nameof(Snippet.CodeSnippet.Header.Shortcut)</label>
-                    <input id="@nameof(Snippet.CodeSnippet.Header.Shortcut)"
-                        @bind-value="Snippet.CodeSnippet.Header.Shortcut" @bind-value:event="oninput"
-                        class="form-control border border-primary" />
-                </div>
-                <div class="form-group col-12 col-lg-6">
-                    <label for="@nameof(Snippet.CodeSnippet.Snippet.Code.Language)"
-                        class="h5">@nameof(Snippet.CodeSnippet.Snippet.Code.Language)</label>
-                    <input id="@nameof(Snippet.CodeSnippet.Snippet.Code.Language)"
-                        @bind-value="Snippet.CodeSnippet.Snippet.Code.Language" @bind-value:event="oninput"
-                        list="@nameof(Constants.Languages)" class="form-control border border-primary" />
+            <details open>
+                <summary class="h5 mb-2">Properties</summary>
 
-                    <DataList Id="@nameof(Constants.Languages)" Options="Constants.Languages.All" />
-                </div>
-                <div class="form-group col-12 col-lg-6">
-                    <label for="@nameof(Snippet.CodeSnippet.Snippet.Code.Kind)"
-                        class="h5">@nameof(Snippet.CodeSnippet.Snippet.Code.Kind)</label>
-                    <input id="@nameof(Snippet.CodeSnippet.Snippet.Code.Kind)"
-                        @bind-value="Snippet.CodeSnippet.Snippet.Code.Kind" @bind-value:event="oninput"
-                        list="@nameof(Constants.Kinds)" class="form-control border" />
-
-                    <DataList Id="@nameof(Constants.Kinds)" Options="Constants.Kinds" />
-                </div>
-                <div class="form-group col-12 col-lg-6">
-                    <label for="@nameof(Snippet.CodeSnippet.Snippet.Code.Delimiter)"
-                        class="h5">@nameof(Snippet.CodeSnippet.Snippet.Code.Delimiter)</label>
-                    <input id="@nameof(Snippet.CodeSnippet.Snippet.Code.Delimiter)"
-                        @bind-value="Snippet.CodeSnippet.Snippet.Code.Delimiter" maxlength="1"
-                        class="form-control border" />
-                </div>
-                <div class="col-12 col-lg-6 mb-3 mb-lg-0">
-                    <h2 class="h5">@nameof(Constants.SnippetTypes).ToSeparateWords()</h2>
-                    <div class="form-check">
-                        <input id="@nameof(Snippet.CodeSnippet.Header.IsExpansion)"
-                            @bind="Snippet.CodeSnippet.Header.IsExpansion" type="checkbox" class="form-check-input">
-                        <label class="form-check-label" for="@nameof(Snippet.CodeSnippet.Header.IsExpansion)">
-                            @Constants.SnippetTypes.Expansion
-                        </label>
+                <div class="row">
+                    <div class="form-group col-12 col-lg-6">
+                        <label for="@nameof(Snippet.CodeSnippet.Header.Title)"
+                            class="h5">@nameof(Snippet.CodeSnippet.Header.Title)</label>
+                        <input id="@nameof(Snippet.CodeSnippet.Header.Title)" @bind-value="Snippet.CodeSnippet.Header.Title"
+                            @bind-value:event="oninput" class="form-control border border-primary" />
                     </div>
-                    <div class="form-check">
-                        <input id="@nameof(Snippet.CodeSnippet.Header.IsSurroundsWith)"
-                            @bind="Snippet.CodeSnippet.Header.IsSurroundsWith" type="checkbox" class="form-check-input">
-                        <label class="form-check-label" for="@nameof(Snippet.CodeSnippet.Header.IsSurroundsWith)">
-                            @Constants.SnippetTypes.SurroundsWith
-                        </label>
+                    <div class="form-group col-12 col-lg-6">
+                        <label for="@nameof(Snippet.CodeSnippet.Header.Shortcut)"
+                            class="h5">@nameof(Snippet.CodeSnippet.Header.Shortcut)</label>
+                        <input id="@nameof(Snippet.CodeSnippet.Header.Shortcut)"
+                            @bind-value="Snippet.CodeSnippet.Header.Shortcut" @bind-value:event="oninput"
+                            class="form-control border border-primary" />
                     </div>
-                </div>
-                <div class="form-group col-12 col-lg-6">
-                    <label for="@nameof(Snippet.CodeSnippet.Header.Description)"
-                        class="h5">@nameof(Snippet.CodeSnippet.Header.Description)</label>
-                    <input id="@nameof(Snippet.CodeSnippet.Header.Description)"
-                        @bind-value="Snippet.CodeSnippet.Header.Description" @bind-value:event="oninput"
-                        class="form-control" />
-                </div>
-                <div class="form-group col-12 col-lg-6">
-                    <label for="@nameof(Snippet.CodeSnippet.Header.Author)"
-                        class="h5">@nameof(Snippet.CodeSnippet.Header.Author)</label>
-                    <input id="@nameof(Snippet.CodeSnippet.Header.Author)"
-                        @bind-value="Snippet.CodeSnippet.Header.Author" @bind-value:event="oninput"
-                        class="form-control" />
-                </div>
-            </div>
-            <div>
-                <div class="d-flex justify-content-between">
-                    <h2 class="h5">@nameof(Snippet.CodeSnippet.Snippet.Imports)</h2>
-                    <button type="button" @onclick="AddImport" title="@nameof(AddImport).ToSeparateWords()"
-                        class="btn btn-link btn-sm text-decoration-none text-primary p-0">
-                        <i class="fas fa-plus"></i>
-                    </button>
+                    <div class="form-group col-12 col-lg-6">
+                        <label for="@nameof(Snippet.CodeSnippet.Snippet.Code.Language)"
+                            class="h5">@nameof(Snippet.CodeSnippet.Snippet.Code.Language)</label>
+                        <input id="@nameof(Snippet.CodeSnippet.Snippet.Code.Language)"
+                            @bind-value="Snippet.CodeSnippet.Snippet.Code.Language" @bind-value:event="oninput"
+                            list="@nameof(Constants.Languages)" class="form-control border border-primary" />
+    
+                        <DataList Id="@nameof(Constants.Languages)" Options="Constants.Languages.All" />
+                    </div>
+                    <div class="form-group col-12 col-lg-6">
+                        <label for="@nameof(Snippet.CodeSnippet.Snippet.Code.Kind)"
+                            class="h5">@nameof(Snippet.CodeSnippet.Snippet.Code.Kind)</label>
+                        <input id="@nameof(Snippet.CodeSnippet.Snippet.Code.Kind)"
+                            @bind-value="Snippet.CodeSnippet.Snippet.Code.Kind" @bind-value:event="oninput"
+                            list="@nameof(Constants.Kinds)" class="form-control border" />
+    
+                        <DataList Id="@nameof(Constants.Kinds)" Options="Constants.Kinds" />
+                    </div>
+                    <div class="form-group col-12 col-lg-6">
+                        <label for="@nameof(Snippet.CodeSnippet.Snippet.Code.Delimiter)"
+                            class="h5">@nameof(Snippet.CodeSnippet.Snippet.Code.Delimiter)</label>
+                        <input id="@nameof(Snippet.CodeSnippet.Snippet.Code.Delimiter)"
+                            @bind-value="Snippet.CodeSnippet.Snippet.Code.Delimiter" maxlength="1"
+                            class="form-control border" />
+                    </div>
+                    <div class="col-12 col-lg-6 mb-3 mb-lg-0">
+                        <h2 class="h5">@nameof(Constants.SnippetTypes).ToSeparateWords()</h2>
+                        <div class="form-check">
+                            <input id="@nameof(Snippet.CodeSnippet.Header.IsExpansion)"
+                                @bind="Snippet.CodeSnippet.Header.IsExpansion" type="checkbox" class="form-check-input">
+                            <label class="form-check-label" for="@nameof(Snippet.CodeSnippet.Header.IsExpansion)">
+                                @Constants.SnippetTypes.Expansion
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input id="@nameof(Snippet.CodeSnippet.Header.IsSurroundsWith)"
+                                @bind="Snippet.CodeSnippet.Header.IsSurroundsWith" type="checkbox" class="form-check-input">
+                            <label class="form-check-label" for="@nameof(Snippet.CodeSnippet.Header.IsSurroundsWith)">
+                                @Constants.SnippetTypes.SurroundsWith
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group col-12 col-lg-6">
+                        <label for="@nameof(Snippet.CodeSnippet.Header.Description)"
+                            class="h5">@nameof(Snippet.CodeSnippet.Header.Description)</label>
+                        <input id="@nameof(Snippet.CodeSnippet.Header.Description)"
+                            @bind-value="Snippet.CodeSnippet.Header.Description" @bind-value:event="oninput"
+                            class="form-control" />
+                    </div>
+                    <div class="form-group col-12 col-lg-6">
+                        <label for="@nameof(Snippet.CodeSnippet.Header.Author)"
+                            class="h5">@nameof(Snippet.CodeSnippet.Header.Author)</label>
+                        <input id="@nameof(Snippet.CodeSnippet.Header.Author)"
+                            @bind-value="Snippet.CodeSnippet.Header.Author" @bind-value:event="oninput"
+                            class="form-control" />
+                    </div>
                 </div>
                 <div>
-                    @foreach (var (import, i) in Snippet.CodeSnippet.Snippet.Imports.Select((i, j) => (i, j)))
-                    {
-                        <div class="form-group">
-                            <label for="@(nameof(import) + i)" class="small">
-                                @nameof(import.Namespace)
-                            </label>
-                            <FocusedInput id="@(nameof(import) + i)" class="form-control" @bind-Value="import.Namespace"
-                                @bind-Value:event="ValueInput" @onblur="@(_ => RemoveImportIfEmpty(import))" />
-                        </div>
-                    }
-
-                    @if (Snippet.CodeSnippet.Snippet.Imports.Count == 0)
-                    {
-                        <p>
-                            Click <i>plus</i> button to add <i>@nameof(Import)</i>.
-                        </p>
-                    }
+                    <div class="d-flex justify-content-between">
+                        <h2 class="h5">@nameof(Snippet.CodeSnippet.Snippet.Imports)</h2>
+                        <button type="button" @onclick="AddImport" title="@nameof(AddImport).ToSeparateWords()"
+                            class="btn btn-link btn-sm text-decoration-none text-primary p-0">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <div>
+                        @foreach (var (import, i) in Snippet.CodeSnippet.Snippet.Imports.Select((i, j) => (i, j)))
+                        {
+                            <div class="form-group">
+                                <label for="@(nameof(import) + i)" class="small">
+                                    @nameof(import.Namespace)
+                                </label>
+                                <FocusedInput id="@(nameof(import) + i)" class="form-control" @bind-Value="import.Namespace"
+                                    @bind-Value:event="ValueInput" @onblur="@(_ => RemoveImportIfEmpty(import))" />
+                            </div>
+                        }
+    
+                        @if (Snippet.CodeSnippet.Snippet.Imports.Count == 0)
+                        {
+                            <p>
+                                Click <i>plus</i> button to add <i>@nameof(Import)</i>.
+                            </p>
+                        }
+                    </div>
                 </div>
-            </div>
+            </details>
             <div class="d-flex justify-content-end">
                 <div class="form-check form-check-inline">
                     <label class="form-check-label mr-2"
@@ -129,7 +133,7 @@
             </div>
             <div>
                 <div class="d-flex justify-content-between">
-                    <h2 class="h5">@nameof(Snippet.CodeSnippet.Snippet.Declarations)</h2>
+                    <span class="h5">@nameof(Snippet.CodeSnippet.Snippet.Declarations)</span>
                     <button type="button" @onclick="AddDeclaration" title="@nameof(AddDeclaration).ToSeparateWords()"
                         class="btn btn-link btn-sm text-decoration-none text-primary p-0">
                         <i class="fas fa-plus"></i>
